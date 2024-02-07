@@ -1,10 +1,12 @@
 
+
 var btn=document.getElementsByClassName("btn")[0];
 console.log(btn);
 
 
-btn.addEventListener('submit', function(event) {
-  // Redirect to a specific page when the button is clicked
-  window.location.href = "DesignerHomepage.html"; 
-});
 
+
+btn.addEventListener("click", function() {
+  // Change the URL to the desired page
+  window.location.href = "DesignerHomepage.html";
+});
