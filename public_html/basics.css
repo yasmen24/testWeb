@@ -117,7 +117,8 @@ nav a:hover {
 
 
 footer {
-
+display:flex;
+justify-content: center;
     position: relative; 
     top: 25vh;
      width: 100%;
