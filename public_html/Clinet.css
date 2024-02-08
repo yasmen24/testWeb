@@ -42,7 +42,6 @@ Section{
     }
 /* apply style in log-out link */
 #welcome a{
-color:black;
 font-size: 1em;
 font-weight: bold;
 

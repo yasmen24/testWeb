@@ -25,7 +25,7 @@ h1 {
 
 #logout{
 	float: right;
-	font-size: 16px;
+	font-size: 1.2em;
 }
 
 
@@ -60,6 +60,7 @@ td,th{
   text-align: center;
   border-radius: 2px;
   width:20vw;
+  
 }
 
 .table1 td:last-child,
@@ -75,17 +76,20 @@ td,th{
 td{
 	background-color: #e2dcd7;
 	height:10vw;
+          font-size: 1.2em;
+
 
 }
 
 th {
     background-color: #d0baa0;
+        font-size: 1.3em;
+
 }
 
 thead tr {
     height: 60px;
     background: #FFED86;
-    font-size: 16px;
 }
 
 tbody tr {
@@ -117,6 +121,7 @@ tbody tr {
 
 #userInfo{
 	width: 98vw;
+        font-size: 1.2em;
 }
 
 .des{
