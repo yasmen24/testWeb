@@ -1,0 +1,153 @@
+<!Doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Clinet homepage</title>
+        <link rel="stylesheet" href="Clinet.css">
+        <link rel="stylesheet" href="basics.css">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="Clinet.js"></script>
+    </head>
+
+    <body>
+        <header id="Home-header">
+
+            <div class="logo-title">
+    
+                <img src="image/logo.jpeg" alt="design mate Logo" id="logo">
+    
+                <span></span>
+    
+            </div>
+        </header>
+        <!--***********************************************************************-->
+
+         <!--welcome messsage &user info-->
+        <section id="userInfoSection">
+                <div id="welcome">
+                        <h3 class="name"> Welcome :Huda</h3>
+                       <a href="index.php" >log-out</a>
+                </div>
+
+                <div id="userInfoBox">
+                      <ul >
+                        <li>First Name:<span> Huda</span></li>
+                        <li> Last Name<span> Abduallah</span></li>
+                        <li>Email Address:<span> huda@gmail.com</span></li>
+                    </ul>
+                </div>
+        </section>
+        <!--************************************************************************-->
+        <!-- interior design table part -->
+        <section id="interiordesignPart">
+
+            <div id="tableHeadr-1">
+                <h2>Interior design </h2>
+                <div id="interiorFilter">
+                        <label for="drop-downMenue">Select Category: </label>
+                        <select name="downMenue" id="drop-downMenue">
+                            <option value="Modern">Modern</option>
+                            <option value="Country">Country</option>
+                            <option value="Coastal">Coastal</option>
+                            <option value="Bohemian">Bohemian</option>
+                        </select>
+                        <button id="Filter" onclick="TableFilter">Filter</button>
+                </div>
+            </div>
+        <!--************************************************************************-->
+            <table class="table1">
+               
+                <!--row 1 (table header)-->
+                                    <thead class="table1">
+
+                <tr>
+                    <th  >Designer</th>
+                    <th >Specialty</th>
+                </tr>
+                           </thead>
+
+               <!--row 2(data)-->
+               <tr>
+                    <td > <a href="OneDesigner.php"><img src="image\logo2.jpg" alt="image"></a><br> <a href="OneDesigner.php">Interior Design</a></td>
+                    <td>modern,country</td>
+                    <td ><a href="Request design consultation.php">Request Design Consultaion</a></td>
+              </tr>
+               <!--row 3(data)-->
+            <tr>
+                <td><a href="OneDesigner.php"><img src="image\logo4.jpg" alt="image"></a><br> <a href="OneDesigner.php">ETONNEAT Design</a></td>
+                <td>country</td>
+                <td><a href="Request design consultation.php">Request Design Consultaion</a></td>
+           </tr>
+            <!--row 4(data)-->
+           <tr>
+            <td><a href="OneDesigner.php"><img src="image\logo1.jpg" alt="image"></a><br> <a href="OneDesigner.php">interior design</a></td>
+            <td>Bohemian,country</td>
+            <td><a href="Request design consultation.php">Request Design Consultaion</a></td>
+          </tr>
+          
+            </table>
+        </section>
+
+        <section id="ConsultaionPart">
+                <h2>Previous Design Consultaion Requests</h2>
+                <table class="Table2">
+                     <!--row 1(header)-->
+                        <thead class="Table2">
+
+                    <tr >
+                        <th >Designer</th>
+                        <th >Room</th>
+                        <th >Dimensions</th>
+                        <th >Design Category</th>
+                        <th  >Color Preferences</th>
+                        <th  >Request Date</th>
+                        <th >Design Consultaion</th>
+                    </tr>
+                                        </thead>
+
+                     <!--row 2(data)-->
+                    <tr>
+                        <td > <a href="OneDesigner.php"><img src="image\logo2.jpg" alt="image"></a><br> <a href="OneDesigner.php">Interior Design</a></td>
+                        <td>Living Room</td>
+                        <td>4x5m</td>
+                        <td>Modern</td>
+                        <td>Beige and Green</td>
+                        <td>9/1/2024</td>
+                        <td>Pending Consultaion</td>
+                    </tr>
+                     <!--row 3(data)-->
+                    <tr>
+                        <td><a href="OneDesigner.php"><img src="image\logo4.jpg" alt="image"></a><br> <a href="OneDesigner.php">ETONNEAT Design</a></td>
+                        <td>Bedroom</td>
+                        <td>3x4m</td>
+                        <td>Coastal</td>
+                        <td>Blue and white</td>
+                        <td>7/1/2024</td>
+                        <td>consultation declined</td>
+                    </tr>
+                    
+
+                </table>
+
+        </section>
+        <footer id="Home-footer">
+
+            <!-- Multimedia -->
+    
+            <div class="multimedia" >
+    
+                <br>
+           <div class="icons">
+                <i class="fa-solid fa-envelope">   </i>
+    
+                <i class="fa-solid fa-phone">   </i>
+                <i class="fa-brands fa-twitter icons">   </i>
+                <i class="fa-brands fa-instagram">   </i></div>
+    <p>© 2024 - DESIGN MATE ALL RIGHTS RESERVED. | 55 RUE GABRIEL LIPPMANN, L-6947, NIEDERANVEN, LUXEMBOURG</p>
+    
+            </div>
+        </footer>
+    </body>
+
+
+</html>
