@@ -1,0 +1,101 @@
+*{
+	padding:0%;
+	margin:0%;
+	box-sizing: border-box;
+}
+
+body{
+	background-image: url("image/formBackground.jpg");
+	background-attachment: fixed;
+	background-position: center;
+	background-size:cover;
+	background-repeat: no-repeat;
+}
+
+.container{
+	opacity:0.97;
+	width:40%;/*95%*/
+	position: relative;
+	left: 30%;
+	right: 20%;
+	padding: 2%;
+	border-radius:10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0 20px rgba(41, 41, 41, 0.25);
+	
+	background-color: rgba(245, 245, 220, 0.7);
+}
+
+form{
+	width:100%;
+	position:relative;
+	margin:30px auto 0 auto;
+	color:#656363;
+}
+
+
+label, option{
+	color:#8A9A5B;
+	font-size:14px;
+}
+
+textarea, input,select,select#DesignSelect{
+	width:100%;
+	font-weight:400;
+	padding:10px 10px;
+	border-radius:5px;
+	border:1.2px solid #c4cae0;
+	margin-top:5px;
+	background-color: #fcddc97a;
+	color:#656363;
+	margin-bottom:5%;
+}
+
+textarea{
+	resize:none;
+}
+
+textarea:focus, input:focus{
+	outline:none;
+	border-color:#8A9A5B;
+}
+
+
+.form input[type="button"] {
+	background: #8A9A5B;
+	color: #ffffff;
+	display: block;
+    margin: auto;
+    height: 55px;
+    width: 30%;
+    font-size: 1rem;
+    border: none;
+	border-radius:6px;
+}
+
+.form input[type="button"]:hover {
+    background: #FAF0DC;
+    color: #CAAD7E;
+	display: block;
+    margin: auto;
+    height: 55px;
+    width: 30%;
+    font-size: 1rem;
+    border: none;
+	border-radius:6px;
+}
+
+h1{
+    font-weight: bold;
+    text-align: center;
+	font-size: 1.5rem;
+    color: #8A9A5B;
+    padding: 15px 25px;
+    box-shadow: 0 0 20px rgba(41, 41, 41, 0.25);
+	border-radius:6px;
+        background-color: #eddfcd;
+}
+
