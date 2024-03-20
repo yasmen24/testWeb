@@ -42,7 +42,7 @@
         <label for="clientRadio">Client</label>
 
         <div id="designerForm" class="user-form">
-            <!-- Designer form elements -->
+            <!-- Designer form elements--- -->
             <form id="designerSignUpForm">
                 <label for="firstName">First Name:</label>
                 <input type="text" id="firstName" name="firstName" required>
