@@ -1,0 +1,129 @@
+*{
+	padding:0%;
+	margin:0%;
+	box-sizing: border-box;
+}
+
+body {
+      background-image: url("image/designerBackground.jpg");
+	background-attachment: fixed;
+	background-position: center;
+	background-size: cover;
+	font: 400 16px 'Calibri', 'Arial';
+}
+
+.table1 img {
+    width: 100%;
+    height: auto;
+}
+
+
+h1 {
+    font-size: 1.5em; /* Adjust the font size as needed */
+}
+
+
+#logout{
+	float: right;
+	font-size: 1.2em;
+}
+
+
+#designerInfo{
+    margin-top: 1%;
+    background-color: #d5c5bb;
+    padding: 2%;
+    border-radius: 1vw;
+}
+  #designerInfo li{
+	font-size: 1.0em;
+	font-weight: bold;
+	list-style: none;
+	letter-spacing: 0.5px;
+	color: rgb(57, 56, 56);
+  }
+
+section{
+	padding:1%;
+	display:flex;
+	flex-direction:column;
+	width:97vw;
+}
+
+table{
+  border-collapse:collapse;
+  width:97%;
+}
+
+td,th{
+  border: 1px black solid;
+  text-align: center;
+  border-radius: 2px;
+  width:20vw;
+  
+}
+
+.table1 td:last-child,
+.table1 td:nth-last-child(2){
+    width: 6%; 
+}
+
+.table2 td:last-child,
+.table2 td:nth-last-child(2) {
+	width: 12%;
+}
+
+td{
+	background-color: #e2dcd7;
+	height:10vw;
+          font-size: 1.2em;
+
+
+}
+
+th {
+    background-color: #d0baa0;
+        font-size: 1.3em;
+
+}
+
+thead tr {
+    height: 60px;
+    background: #FFED86;
+}
+
+tbody tr {
+    height: 48px;
+    border-bottom: 1px solid #E3F1D5;
+}
+
+
+#tableHeadr-1, #tableHeadr-2 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; /* Align items vertically in the center */
+	
+}
+
+#tableHeadr-1{
+	display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #C4BAAB;
+    padding: 2%;
+    border-radius: 0.5vw;
+}
+
+#tableHeadr-2,#table2 h1{
+	padding-bottom:2%;
+}
+
+#userInfo{
+	width: 98vw;
+        font-size: 1.2em;
+}
+
+.des{
+	padding:0px 2px;
+}
