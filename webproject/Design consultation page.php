@@ -24,7 +24,7 @@
         <h2>Design Consultation</h2>
 		
 
-        <!-- Display Client's Request Information -->
+        <!--1111 Display Client's Request Information -->
         <div class="client-info">
 		    <p id="name"><strong>Client :Sara Ahmeed</strong></p>
             <p id="roomT"><strong>Room Type :Bedroom</strong></p>
