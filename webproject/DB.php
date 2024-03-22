@@ -2,7 +2,7 @@
 $servername = "localhost"; // or your server IP address
 $username = "root";
 $password = "root";
-$dbname = "WebProject";
+$dbname = "consultationrequestportfolio";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);

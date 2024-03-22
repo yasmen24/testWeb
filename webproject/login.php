@@ -31,7 +31,7 @@
         </header>
     <div class="login-page">
         <h2>Login</h2>
-        <form id="loginForm">
+        <form action="loginhandler.php" method="POST" id="loginForm">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
