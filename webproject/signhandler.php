@@ -12,9 +12,9 @@ function hashPassword($password) {
 // Function to redirect to homepage based on user type
 function redirectToHomepage($userType) {
     if ($userType === 'designer') {
-        header('Location: designer_home.php');
+        header('Location: DesignerHomepage.php');
     } elseif ($userType === 'client') {
-        header('Location: client_home.php');
+        header('Location: Clinet.php');
     }
     exit();
 }
@@ -31,18 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
 
         // Check if email is unique
-        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM Designer WHERE emailAddress = ?');
+        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM designer WHERE emailAddress = ?');
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
         if ($result['count'] > 0) {
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
-            header('Location: signup_page.php');
+            header('Location: signuphandler.php');
             exit();
         }
 
         // Insert designer into database
-        $stmt = "INSERT INTO Designer (firstName, lastName, emailAddress, password, brandName) VALUES('$firstName','$lastName','$email','$password','$brandName') ";
+        $stmt = "INSERT INTO designer (firstName, lastName, emailAddress, password, brandName) VALUES('$firstName','$lastName','$email','$password','$brandName') ";
         mysqli_query($conn, $stmt);
 
         // Store user type and ID in session variables
@@ -59,21 +59,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
         $password = hashPassword($_POST['password']);
-        // Other form fields...
+       
 
         // Check if email is unique
-        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM Client WHERE emailAddress = ?');
+        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM client WHERE emailAddress = ?');
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
         if ($result['count'] > 0) {
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
-            header('Location: signup_page.php');
+            header('Location: signuphandler.php');
             exit();
         }
 
         // Insert client into database
-        $stmt = $conn->prepare('INSERT INTO Client (firstName, lastName, emailAddress, password) VALUES (?, ?, ?, ?)');
+        $stmt = $conn->prepare('INSERT INTO client (firstName, lastName, emailAddress, password) VALUES (?, ?, ?, ?)');
         $stmt->bind_param('ssss', $firstName, $lastName, $email, $password);
         $stmt->execute();
 
