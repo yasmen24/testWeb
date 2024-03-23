@@ -101,7 +101,7 @@ table{
 
 #interiordesignPart,#ConsultaionPart{
   padding: 2%;
-  overflow: auto;
+/*  overflow: auto;*/
   display: flex;
   flex-direction: column;
 text-align: center;
