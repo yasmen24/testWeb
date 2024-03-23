@@ -32,7 +32,7 @@
 
             <div id="designerForm" class="user-form">
                 <!-- Designer form elements -->
-                <form action="signhandler.php" method="POST" enctype="multipart/form-data" id="designerSignUpForm">
+               <form action="signhandler.php" method="POST" enctype="multipart/form-data" id="designerSignUpForm">
                     <label for="firstName">First Name:</label>
                     <input type="text" id="firstName" name="firstName" required>
 
