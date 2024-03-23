@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // Incorrect password
             $_SESSION['login_error'] = 'Incorrect email or password.';
-            header('Location: loginhandler.php');
+            header('Location: login.php');
             exit();
         }
     } else {

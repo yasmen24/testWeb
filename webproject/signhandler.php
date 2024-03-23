@@ -22,7 +22,7 @@ function redirectToHomepage($userType) {
 // Handle sign-up form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if form was submitted for a designer
-    if (isset($_POST['designerSignup'])) {
+    if (isset($_POST['designerSignUpForm'])) {
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $stmt->get_result()->fetch_assoc();
         if ($result['count'] > 0) {
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
-            header('Location: signuphandler.php');
+            header('Location: signup.php');
             exit();
         }
 
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if form was submitted for a client
-    if (isset($_POST['clientSignup'])) {
+    if (isset($_POST['clientSignUpForm'])) {
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $stmt->get_result()->fetch_assoc();
         if ($result['count'] > 0) {
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
-            header('Location: signuphandler.php');
+            header('Location: signup.php');
             exit();
         }
 
