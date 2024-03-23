@@ -32,7 +32,7 @@
 
             <div id="designerForm" class="user-form">
                 <!-- Designer form elements -->
-                <form action="signhandler.php" method="POST" enctype="multipart/form-data" name="designerSignUpForm">
+                <form action="signhandler.php" method="POST" enctype="multipart/form-data" id="designerSignUpForm">
                     <label for="firstName">First Name:</label>
                     <input type="text" id="firstName" name="firstName" required>
 
@@ -64,7 +64,7 @@
 
             <div id="clientForm" class="user-form" style="display:none;">
                 <!-- Client form elements -->
-                <form action="signhandler.php" method="POST" name="clientSignUpForm">
+                <form action="signhandler.php" method="POST" id="clientSignUpForm">
                     <label for="firstName">First Name:</label>
                     <input type="text" id="firstName" name="firstName" required>
 
