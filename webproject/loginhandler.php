@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Password is correct, set session variables and redirect to homepage
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['user_type'] = $userType;
-            redirectToHomepage("Clinet");
+            redirectToHomepage("clinet");
         } else {
             // Incorrect password
             $_SESSION['login_error'] = 'Incorrect email or password.';
