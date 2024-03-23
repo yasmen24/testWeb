@@ -3,6 +3,7 @@ session_start();
 
 // Include database connection
 include 'DB.php';
+// here i have to include the photos file
 
 // Function to hash passwords
 function hashPassword($password) {
