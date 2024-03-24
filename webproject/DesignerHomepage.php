@@ -85,7 +85,7 @@
                                     <?php if(isset($designer['firstName'])) { ?>
                                         <h3 id="welcomeText">Welcome, <?php echo $designer['firstName']; ?>!</h3>
                                     <?php } ?>
-                                    <a href="index.php" id="logout">Log-out</a>
+                                    <a href="signout.php" id="logout">Sign out</a>
                                 </div>
 
 

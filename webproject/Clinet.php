@@ -106,7 +106,7 @@ $consultationRequests = fetchConsultationRequests($clientId);
         <section id="userInfoSection">
                 <div id="welcome">
                         <h3 class="name"> Welcome :Huda</h3>
-                       <a href="index.php" >log-out</a>
+                       <a href="signout.php" >Sign out</a>
                 </div>
 
                 <div id="userInfoBox">
