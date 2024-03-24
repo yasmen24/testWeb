@@ -43,10 +43,11 @@ if (isset($_SESSION['signup_error'])) {
         <div class="signup-page">
             <h2>Create an Account</h2>
             <p>Select your user type:</p>
-            <input type="radio" name="userType" value="designer" id="designerRadio">
             <label for="designerRadio">Designer</label>
-            <input type="radio" name="userType" value="client" id="clientRadio">
+            <input type="radio" name="userType" value="designer" id="designerRadio">
             <label for="clientRadio">Client</label>
+            <input type="radio" name="userType" value="client" id="clientRadio">
+            
 
             <div id="designerForm" class="user-form">
                 <!-- Designer form elements -->
@@ -70,10 +71,15 @@ if (isset($_SESSION['signup_error'])) {
                     <input type="file" id="logo" name="logo" accept="image/*" required>
 
                     <label for="specialities">Specialities:</label>
-                    <input type="checkbox" id="modern" name="specialities[]" value="modern">
                     <label for="modern">Modern</label>
-                    <input type="checkbox" id="country" name="specialities[]" value="country">
+                    <input type="checkbox" id="modern" name="specialities[]" value="modern">
                     <label for="country">Country</label>
+                    <input type="checkbox" id="country" name="specialities[]" value="country">
+                    <label for="country">Coastal</label>
+                    <input type="checkbox" id="coastal" name="specialities[]" value="coastal">
+                    <label for="country">Bohemian</label>
+                    <input type="checkbox" id="bohemian" name="specialities[]" value="bohemian">
+                    
                     <!-- Add more checkboxes for other specialities -->
 
                     <input type="submit" name="designerSignup" value="Sign Up">

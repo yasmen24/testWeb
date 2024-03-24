@@ -39,7 +39,7 @@
 						</div>
 						
 						<div class="file">
-							<label for="image">image of the project:</label>;
+							<label for="image">image of the project:</label>
 							<input type="file" id="image" name="image">
 						</div>
 					 
