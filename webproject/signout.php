@@ -7,6 +7,11 @@ if(isset($_SESSION['designerID'])) {
     unset($_SESSION['designerID']);
 }
 
+if(isset($_SESSION['clientID'])) {
+    unset($_SESSION['clientID']);
+}
+
+
 // Destroy the session
 session_destroy();
 
