@@ -37,12 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          
     }
     
-    if($row= mysqli_fetch_assoc($result)!=null){
+ $row = mysqli_fetch_assoc($result);
+if ($row != null) {
 
   // Hash the password retrieved from the database
-    $hashedPasswordFromDB = password_hash($row['password'], PASSWORD_DEFAULT);
-   
-    if (password_verify($_POST['password'], $hashedPasswordFromDB)){
+    //$hashedPasswordFromDB = password_hash($row['password'], PASSWORD_DEFAULT);
+       
+    if (password_verify($_POST['password'], $row['password'])){
         $_SESSION['id'] = $row['id'];
         $_SESSION['userType'] = ($userType === 'designer') ? 'designer' : 'client';
         redirectToHomepage($userType);

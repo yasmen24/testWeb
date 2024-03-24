@@ -28,7 +28,7 @@
                             session_start();
 
                             // Check if designer ID is set in the session
-                            if(isset($_SESSION['designerID'])) {
+                            if(isset($_SESSION['user_id'])) {
                                 // Database connection parameters
                                 $servername = "localhost";
                                 $username = "root";
@@ -44,7 +44,7 @@
                                 }
 
                                 // Prepare SQL statement to fetch designer information
-                                $designerID = $_SESSION['designerID'];
+                                $designerID = $_SESSION['user_id'];
                                 $sql = "SELECT d.*, dc.category_name 
                                     FROM designers d 
                                     INNER JOIN DesignCategory dc ON d.category_id = dc.category_id
@@ -127,7 +127,7 @@
                                                 session_start();
 
                                                 // Check if designer ID is set in the session
-                                                if(isset($_SESSION['designerID'])) {
+                                                if(isset($_SESSION['user_id'])) {
                                                     $servername = "localhost"; 
                                                     $username = "root";
                                                     $password = "root";
@@ -141,11 +141,11 @@
                                                     }
 
                                                     // Prepare SQL statement to fetch projects from the designer's portfolio along with design category
-                                                    $designerID = $_SESSION['designerID'];
+                                                    $designerID = $_SESSION['user_id'];
                                                     $sql = "SELECT p.*, dc.category
                                                         FROM DesignPortoflioProject p 
                                                         INNER JOIN DesignCategory dc ON p.designCategoryID = dc.id
-                                                        WHERE p.designerID = $designerID";
+                                                        WHERE p.user_id = $designerID";
 
                                                     // Execute SQL statement
                                                     $result = mysqli_query($conn, $sql);
@@ -200,7 +200,7 @@
                                     session_start();
 
                                     // Check if designer ID is set in the session
-                                    if(isset($_SESSION['designerID'])) {
+                                    if(isset($_SESSION['user_id'])) {
                                                     $servername = "localhost"; 
                                                     $username = "root";
                                                     $password = "root";
@@ -214,14 +214,14 @@
                                         }
 
                                         // Prepare SQL statement to fetch pending design consultation requests for the designer
-                                        $designerID = $_SESSION['designerID'];
+                                        $designerID = $_SESSION['user_id'];
                                         $sql = "SELECT cr.*, c.firstName AS clientFirstName, c.lastName AS clientLastName, rt.type AS roomType, dc.category AS designCategory, rs.status
                                                 FROM DesignConsultationRequest cr 
                                                 INNER JOIN Client c ON cr.clientID = c.id
                                                 INNER JOIN RoomType rt ON cr.roomTypeID = rt.id
                                                 INNER JOIN DesignCategory dc ON cr.designCategoryID = dc.id
                                                 INNER JOIN RequestStatus rs ON cr.statusID = rs.id
-                                                WHERE cr.designerID = $designerID AND rs.status = 'pending'";
+                                                WHERE cr.user_id = $designerID AND rs.status = 'pending'";
 
                                         // Execute SQL statement
                                         $result = mysqli_query($conn, $sql);
@@ -237,8 +237,8 @@
                                                 echo "<td>{$row['designCategory']}</td>";
                                                 echo "<td>{$row['colorPreferences']}</td>";
                                                 echo "<td>{$row['date']}</td>";
-                                                echo "<td><a href='Design consultation page.php?request_id={$row['id']}'>Provide Consultation</a></td>"; // Provide Consultation link
-                                                echo "<td><a href='DeclineConsultation.php?request_id={$row['id']}'>Decline Consultation</a></td>"; // Decline Consultation link
+                                                echo "<td><a href='Design consultation page.php?request_id={$row['id']}'>Provide Consultation</a></td>";
+                                                echo "<td><a href='DeclineConsultation.php?request_id={$row['id']}'>Decline Consultation</a></td>";
                                                 echo "</tr>";
                                             }
                                         } else {
