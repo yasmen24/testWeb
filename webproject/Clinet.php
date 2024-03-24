@@ -1,3 +1,83 @@
+<?php
+include 'DB.php'; // Ensure this path correctly points to your database connection setup
+
+function fetchDesigners($category = null) {
+    global $conn; // Use the connection from the global scope
+    // Updated SQL query with proper GROUP BY clause
+    $sql = "SELECT 
+                d.id, 
+                d.brandName, 
+                d.logoImgFileName, 
+                GROUP_CONCAT(c.category SEPARATOR ', ') AS specialties 
+            FROM 
+                Designer d
+                JOIN DesignerSpeciality ds ON d.id = ds.designerID
+                JOIN DesignCategory c ON ds.designCategoryID = c.id";
+    
+    if ($category) {
+        // Append WHERE clause for filtering by category
+        $sql .= " WHERE c.category = ? GROUP BY d.id, d.brandName, d.logoImgFileName LIMIT 0, 25";
+        $stmt = $conn->prepare($sql);
+        // Bind the category parameter
+        $stmt->bind_param("s", $category);
+    } else {
+        // Append GROUP BY clause without filtering
+        $sql .= " GROUP BY d.id, d.brandName, d.logoImgFileName LIMIT 0, 25";
+        $stmt = $conn->prepare($sql);
+    }
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $designers = $result->fetch_all(MYSQLI_ASSOC);
+    
+    $stmt->close();
+    return $designers;
+}
+
+// Retrieve selected category from POST request, if applicable
+$selectedCategory = isset($_POST['downMenue']) ? $_POST['downMenue'] : null;
+// Fetch designers based on the selected category or fetch all if no category is selected
+$designers = fetchDesigners($selectedCategory);
+
+
+
+/////consultaion table
+function fetchConsultationRequests($clientId) {
+    global $conn;
+    $sql = "SELECT 
+                dcr.id, d.brandName, d.logoImgFileName, rt.type AS roomType, 
+                CONCAT(dcr.roomWidth, 'x', dcr.roomLength) AS dimensions, 
+                dc.category, dcr.colorPreferences, dcr.date, 
+                rs.status, dcns.consultation, dcns.consultationImgFileName
+            FROM 
+                DesignConsultationRequest dcr
+                JOIN Designer d ON dcr.designerID = d.id
+                JOIN RoomType rt ON dcr.roomTypeID = rt.id
+                JOIN DesignCategory dc ON dcr.designCategoryID = dc.id
+                JOIN RequestStatus rs ON dcr.statusID = rs.id
+                LEFT JOIN DesignConsultation dcns ON dcr.id = dcns.requestID
+            WHERE 
+                dcr.clientID = ?
+            ORDER BY 
+                dcr.date DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $clientId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $requests = $result->fetch_all(MYSQLI_ASSOC);
+    $stmt->close();
+    return $requests;
+}
+
+// Assume you've got a way to get the current client's ID, for demonstration let's use:
+$clientId = 2; // This would realistically come from session data or another source  ///replace with session
+$consultationRequests = fetchConsultationRequests($clientId);
+
+
+?>
+
+
+
 <!Doctype html>
 <html>
     <head>
@@ -43,6 +123,7 @@
 
             <div id="tableHeadr-1">
                 <h2>Interior design </h2>
+                <form  action="Clinet.php" method="post">
                 <div id="interiorFilter">
                         <label for="drop-downMenue">Select Category: </label>
                         <select name="downMenue" id="drop-downMenue">
@@ -51,8 +132,9 @@
                             <option value="Coastal">Coastal</option>
                             <option value="Bohemian">Bohemian</option>
                         </select>
-                        <button id="Filter" onclick="TableFilter">Filter</button>
+                        <button id="Filter" >Filter</button>
                 </div>
+                </form>
             </div>
         <!--************************************************************************-->
             <table class="table1">
@@ -68,68 +150,70 @@
 
                <!--row 2(data)-->
                <tr>
-                    <td > <a href="OneDesigner.php"><img src="image\logo2.jpg" alt="image"></a><br> <a href="OneDesigner.php">Interior Design</a></td>
-                    <td>modern,country</td>
-                    <td ><a href="Request design consultation.php">Request Design Consultaion</a></td>
+                 <?php foreach ($designers as $designer): ?>
+        <tr>
+            <td>
+                <a href="OneDesigner.php?designerId=<?php echo $designer['id']; ?>">
+                    <img src="image/<?php echo $designer['logoImgFileName']; ?>" alt="Logo">
+                    <?php echo $designer['brandName']; ?>
+                </a>
+            </td>
+            <td><?php echo $designer['specialties']; ?></td>
+            <td><a href="RequestDesignConsultation.php?designerId=<?php echo $designer['id']; ?>">Request Design Consultation</a></td>
+        </tr>
+        <?php endforeach; ?>
               </tr>
-               <!--row 3(data)-->
-            <tr>
-                <td><a href="OneDesigner.php"><img src="image\logo4.jpg" alt="image"></a><br> <a href="OneDesigner.php">ETONNEAT Design</a></td>
-                <td>country</td>
-                <td><a href="Request design consultation.php">Request Design Consultaion</a></td>
-           </tr>
-            <!--row 4(data)-->
-           <tr>
-            <td><a href="OneDesigner.php"><img src="image\logo1.jpg" alt="image"></a><br> <a href="OneDesigner.php">interior design</a></td>
-            <td>Bohemian,country</td>
-            <td><a href="Request design consultation.php">Request Design Consultaion</a></td>
-          </tr>
+              
+            
           
             </table>
-        </section>
-
         <section id="ConsultaionPart">
-                <h2>Previous Design Consultaion Requests</h2>
-                <table class="Table2">
-                     <!--row 1(header)-->
-                        <thead class="Table2">
+    <h2>Previous Design Consultation Requests</h2>
+    <table class="Table2">
+        <thead>
+            <tr>
+                <th>Designer</th>
+                <th>Room</th>
+                <th>Dimensions</th>
+                <th>Design Category</th>
+                <th>Color Preferences</th>
+                <th>Request Date</th>
+                <th>Request Status</th>
+                <th>Consultation</th>
+            </tr>
+        </thead>
+        <tbody>
+    <?php foreach ($consultationRequests as $request): ?>
+    <tr>
+        <td>
+            <img src="image/<?php echo htmlspecialchars($request['logoImgFileName']); ?>" alt="Logo">
+            <?php echo htmlspecialchars($request['brandName']); ?>
+        </td>
+        <td><?php echo htmlspecialchars($request['roomType']); ?></td>
+        <td><?php echo htmlspecialchars($request['dimensions']); ?></td>
+        <td><?php echo htmlspecialchars($request['category']); ?></td>
+        <td><?php echo htmlspecialchars($request['colorPreferences']); ?></td>
+        <td><?php echo htmlspecialchars($request['date']); ?></td>
+        <td><?php echo htmlspecialchars($request['status']); ?></td>
+        <td>
+            <!-- Check if the status is "Approved" before displaying consultation -->
+            <?php if ($request['status'] === 'Approved' && !empty($request['consultation'])): ?>
+                <div><?php echo htmlspecialchars($request['consultation']); ?></div>
+                <!-- Show image only if there's a consultationImgFileName -->
+                <?php if (!empty($request['consultationImgFileName'])): ?>
+                    <img src="image/<?php echo htmlspecialchars($request['consultationImgFileName']); ?>" alt="Consultation Image" style="max-width: 100px; height: auto;">
+                <?php endif; ?>
+            <?php else: ?>
+                No consultation provided or not approved yet.
+            <?php endif; ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+</tbody>
 
-                    <tr >
-                        <th >Designer</th>
-                        <th >Room</th>
-                        <th >Dimensions</th>
-                        <th >Design Category</th>
-                        <th  >Color Preferences</th>
-                        <th  >Request Date</th>
-                        <th >Design Consultaion</th>
-                    </tr>
-                                        </thead>
+    </table>
+</section>
 
-                     <!--row 2(data)-->
-                    <tr>
-                        <td > <a href="OneDesigner.php"><img src="image\logo2.jpg" alt="image"></a><br> <a href="OneDesigner.php">Interior Design</a></td>
-                        <td>Living Room</td>
-                        <td>4x5m</td>
-                        <td>Modern</td>
-                        <td>Beige and Green</td>
-                        <td>9/1/2024</td>
-                        <td>Pending Consultaion</td>
-                    </tr>
-                     <!--row 3(data)-->
-                    <tr>
-                        <td><a href="OneDesigner.php"><img src="image\logo4.jpg" alt="image"></a><br> <a href="OneDesigner.php">ETONNEAT Design</a></td>
-                        <td>Bedroom</td>
-                        <td>3x4m</td>
-                        <td>Coastal</td>
-                        <td>Blue and white</td>
-                        <td>7/1/2024</td>
-                        <td>consultation declined</td>
-                    </tr>
-                    
-
-                </table>
-
-        </section>
         <footer id="Home-footer">
 
             <!-- Multimedia -->

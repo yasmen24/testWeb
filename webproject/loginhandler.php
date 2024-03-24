@@ -14,7 +14,7 @@ function redirectToHomepage($userType) {
     if ($userType === 'designer') {
         header('Location: DesignerHomepage.php');
     } elseif ($userType === 'client') {
-        header('Location: Clinet.php');
+        header('Location: clinet.php');
     }
     exit();
 }
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // User not found
         $_SESSION['login_error'] = 'User not found.';
-        header('Location: loginhandler.php');
+        header('Location: login.php');
         exit();
     }
 }
