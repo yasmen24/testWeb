@@ -2,51 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Update project page</title>
+    <link rel="stylesheet" href="Updatepage.css">
     <link rel="stylesheet" href="basics.css">
-    <link rel="stylesheet" href="styles.css">
-    <script src="scriptlog.js" defer></script>
-    <title>DesignConnect - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 <body>
 
-    <div id="container">
+    <header id="Home-header">
 
-        <!-- Header -->
+        <div class="logo-title">
 
-        <header id="Home-header">
+            <img src="image/logo.jpeg" alt="design mate Logo" id="logo">
 
-            <div class="logo-title">
+            <span></span>
 
-                <img src="image/logo.jpeg" alt="design mate Logo" id="logo">
+        </div>
+        <?php
 
-                <span></span>
+        $connection = mysqli_connect("localhost", "root", "root", "webproject");
 
+        // Check connection
+        if (mysqli_connect_errno()) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        else {
+           if(isset($_GET['id'])) {
+               $projectid =$_GET['id'];
+               $sql = "SELECT * FROM designportfolioprojec wHERE Id=$projectid";
+               $result = mysqli_query($connection, $sql);
+               if (isset($result)) {
+                   $row =mysqli_fetch_assoc($result);
+                   $projn = $row['projectname'];
+                   $image = $row['projectImgFIleName'];
+                   $description =$row['description'];
+                   $category =$row['designCategoryID ']; }
+                   
+             } } 
+           
+        ?>
+
+    </header>    
+    <section>
+        <form action="UpdatePage.php" method="post" name="ProjectUpdateForm" enctype="multipart/form-data"  >
+        <h1> Edit Project </h1>
+        
+                <!-- Hidden input field to store project ID -->
+                <input type="hidden" name="projectId" value="<?php echo $projectId ?>">
+                
+            <!--project name-->
+            <div class="Pname">
+                <label for="ProjectName" >Project Name:</label>
+                <input type="text" id="ProjectName"name='ProjectName' value="<?php echo $projn ?> "<br>
+            </div>
+            
+            <!--project logo-->
+            <div class="Plogo">
+                <label for="image">Insert logo brand:</label>
+                <input type="file" id="image" name="image" <?php echo $image ?> ><br>
             </div>
 
-            <div class="navbar">
+            <!--drop down menue-->
+            <div class="Pmenue">
+            <label for="drop-downMenue">Select Category:</label>
+                        <select name="drop-downMenue" class="drop-downMenue">
+                            <option value="Minimalist" <?php if($category == "Minimalist") echo "selected"; ?>> Minimalist</option>
+                            <option value="Modern" <?php if($category == "Modern") echo "selected"; ?> >Modern</option>
+                            <option value="Country" <?php if($category == "Country") echo "selected"; ?> >Country</option>
+                            <option value="Coastal" <?php if($category == "Coastal") echo "selected"; ?>>Coastal</option>
+                            <option value="Bohemian" <?php if($category == "Bohemian") echo "selected"; ?>>Bohemian</option>
+                           
+                        </select><br>
+                    </div>        
+            <!--description (text area)-->
+            <div class="Pdescription">
+            <textarea  name='desc' placeholder="design description..." cols="30%" rows="5%"  ><?php echo $description ?></textarea><br>
             </div>
+                <!--submit button-->
 
-        </header>
-    <div class="login-page">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+           <input type="submit" id="btn" name="btn" value="Submit" />
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="userType">User Type:</label>
-            <select id="userType" name="userType" required>
-                <option value="designer">Designer</option>
-                <option value="client">Client</option>
-            </select>
-
-            <input type="submit" value="Login">
+       
         </form>
-    </div>
+        
+    </section>
+ 
+
+    <script src="UpdatePage.js"></script>
     <footer id="Home-footer">
 
         <!-- Multimedia -->
@@ -65,4 +108,30 @@
         </div>
     </footer>
 </body>
+
 </html>
+   
+   <?php
+
+ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve form data
+    
+    $projn = $_POST['ProjectName'];
+    $image = $_POST['image'];
+    $description =$_POST['desc'];
+    $category =$_POST['drop-downMenue'];
+   
+
+    // Update project in the database
+  
+    $sql = "UPDATE designportoflioproject SET projectname = ?, projectImgFIleName = ?,description= ?,designCategoryID = ?, WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssi", $projn, $image, $description, $category , $projectId);
+   
+
+        header("Location: DesignerHomepage.php");
+            exit();
+        
+}
+
+?>

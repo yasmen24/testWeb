@@ -1,4 +1,7 @@
+
 <!DOCTYPE html>
+
+
 <html lang="en">
 		<head>
 			<meta charset="utf-8">
@@ -26,46 +29,56 @@
 					
 					<h1>Add a new project</h1>
 					
-					<form class="form" action="">
+					<form class="form" action="addProject.php" method="post" enctype="multipart/form-data">
+
 						
 						
 						<div class="text">
 							<label for="projectname">Project name:</label>
-							<input type="text" id="projectname" placeholder="Enter your project name">
+							<input type="text" name="projectname" placeholder="Enter your project name">
 						</div>
 						
 						<div class="file">
-							<label for="myfile">image of the project:</label>
-							<input type="file" name="uploadimage">
+							<label for="image">image of the project:</label>;
+							<input type="file" id="image" name="image">
 						</div>
 					 
 					 
 					
 						<div class="menu">
 						  <label for="DesignCategory">Choose the Design Category:</label><br>
-						  <select id="DesignSelect" >
-							<option value="" selected disabled hidden>Select a design category</option>
-							<option>Modern</option>
-							<option>Coastal</option>
-							<option>Minimalism</option>
-							<option>Bohemian</option>
-							<option>scandinavian</option>
-							<option>classic</option>
+						  <select id="DesignSelect" name="DesignSelect" >
+							 <?php
+                                                         $connection = mysqli_connect("localhost", "root", "root", "webproject");
+
+                                                                // Check connection
+                                                                   if (mysqli_connect_errno()) {
+                                                                     die("Connection failed: " . mysqli_connect_error());
+                                                                    }
+
+                                                                      $sql='SELECT * FROM designcategory';
+                                                                      $result= mysqli_query($connection, $sql);
+                                                                         while($row= mysqli_fetch_assoc($result))
+                                                                          {
+                                                                          echo "<option value=".$row['ID'].">".$row['category']."</option>"; }
+                                                            ?>
 						  </select>
 						</div>
 						
 						<div class="textholder">
 						  <label for="Descriptiontext">Description:</label><br>
-						  <textarea placeholder="Description of the design..." cols="30" rows="5"></textarea>
+						  <textarea placeholder="Description of the design..." cols="30" rows="5" name="Descriptiontext"></textarea>
 						</div>
 						
 						
-						<input type="button" id="btn"value="submit" />
+						<input type="submit" id="btn" name="btn" value="Submit" />
+
 						
 						
 				    </form>
 					
 				</div>
+                  
 				
 				<footer id="Home-footer">
 
