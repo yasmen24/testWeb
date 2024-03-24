@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    
+    if(!isset($_SESSION['designerID'])){ //If the designerID is not set onto session variable, we go back to Clinet.php to set it again
+        header("Location: Clinet.php");
+        exit;}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,8 +28,9 @@
     </header>
     <h2>Request Design Consultation</h2>
 
-    <form id="consultationForm" action="#" method="post">
+    <form id="consultationForm" action="addToDatabase.php" method="POST">
 
+        <?php echo "<input type='hidden' name='designerID' value='".$_SESSION['designerID']."'>"; // hidden designerID variable ?>
         <label for="roomType">Room Type:</label>
         <select id="roomType" name="roomType">
             <option value="livingRoom">Living Room</option>
@@ -41,34 +49,26 @@
         <select id="designCategory" name="designCategory">
             <option value="modern">Modern</option>
             <option value="vintage">Vintage</option>
-            <option value="minimalist">Minimalist</option>
-           
+            <option value="minimalist">Minimalist</option>          
         </select><br>
-
         <label for="colorPreferences">Color Preferences:</label>
         <input type="text" id="colorPreferences" name="colorPreferences" placeholder="Enter color preferences"><br>
-
-        <button type="button" id="btn">Submit</button>
-
-    </form>
-    <footer id="Home-footer">
-
-        <!-- Multimedia -->
-
-        <div class="multimedia" >
-
-            <br>
-       <div class="icons">
-            <i class="fa-solid fa-envelope">   </i>
-
-            <i class="fa-solid fa-phone">   </i>
-            <i class="fa-brands fa-twitter icons">   </i>
-            <i class="fa-brands fa-instagram">   </i></div>
-<p>© 2024 - DESIGN MATE ALL RIGHTS RESERVED. | 55 RUE GABRIEL LIPPMANN, L-6947, NIEDERANVEN, LUXEMBOURG</p>
-
-        </div>
-    </footer>
-    <script src="Request design consultation.js"></script>
-
-</body>
+        <input type="submit" id="btn" value="Submit">
+        </form>
+        <footer id="Home-footer">
+        
+            <!-- Multimedia -->
+            <div class="multimedia">
+                <br>
+                <div class="icons">
+                    <i class="fa-solid fa-envelope">   </i>
+                    <i class="fa-solid fa-phone">   </i>
+                    <i class="fa-brands fa-twitter icons">   </i>
+                    <i class="fa-brands fa-instagram">   </i>
+                </div>
+                <p>© 2024 - DESIGN MATE ALL RIGHTS RESERVED. | 55 RUE GABRIEL LIPPMANN, L-6947, NIEDERANVEN, LUXEMBOURG</p>
+            </div>
+        </footer>
+        <script src="Request design consultation.js"></script>
+    </body>
 </html>
