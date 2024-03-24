@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = document.getElementById("password").value;
         const userType = document.getElementById("userType").value;
 
-        // Simulate a successful login (validation is not required in this phase)
+        
         const successfulLogin = true;
 
         if (successfulLogin) {

@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Check if there is a login error message in the session
+if (isset($_SESSION['login_error'])) {
+    $login_error = $_SESSION['login_error'];
+    // Clear the session variable to avoid displaying the same error message again
+    unset($_SESSION['login_error']);
+} else {
+    $login_error = null; // Initialize the variable if there is no error message
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,11 +18,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="basics.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="scriptlog.js" defer></script>
+    <!--<script src="scriptlog.js" defer></script>-->
     <title>DesignConnect - Login</title>
 </head>
 <body>
-
+    
     <div id="container">
 
         <!-- Header -->
@@ -29,6 +41,12 @@
             </div>
 
         </header>
+        
+           <!-- Display login error message if it exists -->
+    <?php if (!empty($login_error)): ?>
+        <p><?php echo $login_error; ?></p>
+    <?php endif; ?>
+        
     <div class="login-page">
         <h2>Login</h2>
         <form action="loginhandler.php" method="POST" id="loginForm">

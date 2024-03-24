@@ -4,59 +4,64 @@ session_start();
 // Include database connection
 include 'DB.php';
 
-// Function to verify hashed passwords
-function verifyPassword($password, $hashedPassword) {
-    return password_verify($password, $hashedPassword);
-}
+
 
 // Function to redirect to homepage based on user type
 function redirectToHomepage($userType) {
     if ($userType === 'designer') {
         header('Location: DesignerHomepage.php');
     } elseif ($userType === 'client') {
-        header('Location: clinet.php');
+        header('Location: Clinet.php');
     }
     exit();
 }
+
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
     $userType = $_POST['userType'];
-
+    
+   
     // Query database to retrieve user information
-    if ($userType === 'designer') {
-        $stmt = $conn->prepare('SELECT id, password FROM designer WHERE emailAddress = ?');
-    } elseif ($userType === 'client') {
-        $stmt = $conn->prepare('SELECT id, password FROM client WHERE emailAddress = ?');
+  if ($userType === 'designer') {
+     
+      $sql ="SELECT id, password FROM designer WHERE emailAddress='$email'";
+     
+      $result= mysqli_query($conn, $sql);
+     
+  } else{
+        $sql = "SELECT id, password FROM client WHERE emailAddress='$email'";
+        $result= mysqli_query($conn, $sql);
+         
     }
+    
+    if($row= mysqli_fetch_assoc($result)!=null){
 
-    $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+  // Hash the password retrieved from the database
+    $hashedPasswordFromDB = password_hash($row['password'], PASSWORD_DEFAULT);
+   
+    if (password_verify($_POST['password'], $hashedPasswordFromDB)){
+        $_SESSION['id'] = $row['id'];
+        $_SESSION['userType'] = ($userType === 'designer') ? 'designer' : 'client';
+        redirectToHomepage($userType);
 
-    if ($result->num_rows === 1) {
-        $row = $result->fetch_assoc();
-        $hashedPassword = $row['password'];
-
-        // Verify password
-        if (verifyPassword($password, $hashedPassword)) {
-            // Password is correct, set session variables and redirect to homepage
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['user_type'] = $userType;
-            redirectToHomepage("clinet");
-        } else {
-            // Incorrect password
-            $_SESSION['login_error'] = 'Incorrect email or password.';
-            header('Location: login.php');
-            exit();
-        }
     } else {
-        // User not found
-        $_SESSION['login_error'] = 'User not found.';
+        // Passwords don't match
+        // Handle the error or redirect the user
+        $_SESSION['login_error'] = 'Incorrect password.';
+        echo "Incorrect password.";
         header('Location: login.php');
         exit();
     }
+} else {
+    // User not found
+    // Handle the error or redirect the user
+    $_SESSION['login_error'] = 'User not found.';
+    echo 'User Not Found';
+    header('Location: login.php');
+    exit();
+}
 }
 ?>
