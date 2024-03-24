@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 // Include database connection
@@ -15,7 +16,7 @@ function redirectToHomepage($userType) {
     if ($userType === 'designer') {
         header('Location: DesignerHomepage.php');
     } elseif ($userType === 'client') {
-        header('Location: Client.php');
+        header('Location: Clinet.php');
     }
     exit();
 }
@@ -24,25 +25,33 @@ function redirectToHomepage($userType) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if form was submitted for a designer
     if (isset($_POST['designerSignup'])) {
+        echo 'h';
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
         $password = hashPassword($_POST['password']);
         $brandName = $_POST['brandName'];
+        
+       
+       $uniqueImage= uploadImage('logo');
+       echo $uniqueImage;
+        if($uniqueImage !=false){
+        
         // Check if email is unique
-        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM designer WHERE emailAddress = ?');
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        if ($result['count'] > 0) {
+        $sql = "SELECT * FROM designer WHERE emailAddress='$email'";
+        
+        $result = mysqli_query($conn, $sql);
+        
+        while ($row = mysqli_fetch_assoc($result)){
+            
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
             header('Location: signup.php');
             exit();
         }
         // Insert designer into database
-        $stmt = $conn->prepare('INSERT INTO designer (firstName, lastName, emailAddress, password, brandName) VALUES (?, ?, ?, ?, ?)');
-        $stmt->bind_param('sssss', $firstName, $lastName, $email, $password, $brandName);
-        if ($stmt->execute()) {
+        $sql = "INSERT INTO designer (firstName, lastName, emailAddress, password, brandName,logoImgFileName) VALUES('$firstName','$lastName','$email','$password','$brandName','$brand_logo_filename')";
+        echo 'yesss';
+        if ($result = mysqli_query($conn, $sql)) {
             // Store user type and ID in session variables
             $_SESSION['user_type'] = 'designer';
             $_SESSION['user_id'] = $stmt->insert_id;
@@ -53,31 +62,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: signup.php');
             exit();
         }
+   
+    }else{   $_SESSION['signup_error']="Sorry, there was an error uploading your file.";}
     }
-
     // Check if form was submitted for a client
     if (isset($_POST['clientSignup'])) {
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
         $password = hashPassword($_POST['password']);
+        
         // Check if email is unique
-        $stmt = $conn->prepare('SELECT COUNT(*) AS count FROM client WHERE emailAddress = ?');
-        $stmt->bind_param('s', $email);
-        $stmt->execute();
-        $result = $stmt->get_result()->fetch_assoc();
-        if ($result['count'] > 0) {
+        $sql = "SELECT * FROM client WHERE emailAddress='$email'";
+        $result = mysqli_query($conn, $sql);
+        
+        while($row= mysqli_fetch_assoc($result)){
             $_SESSION['signup_error'] = 'Email address already exists. Please use a different one.';
+           
             header('Location: signup.php');
             exit();
         }
         // Insert client into database
-        $stmt = $conn->prepare('INSERT INTO client (firstName, lastName, emailAddress, password) VALUES (?, ?, ?, ?)');
-        $stmt->bind_param('ssss', $firstName, $lastName, $email, $password);
-        if ($stmt->execute()) {
+        $stmt ="INSERT INTO client (firstName, lastName, emailAddress, password) VALUES ('$firstName','$lastName','$email','$password')";
+        
+        if (mysqli_query($conn, $stmt)){
             // Store user type and ID in session variables
             $_SESSION['user_type'] = 'client';
             $_SESSION['user_id'] = $stmt->insert_id;
+            
             // Redirect to client homepage
             redirectToHomepage('client');
         } else {
@@ -85,6 +97,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Location: signup.php');
             exit();
         }
+}}
+    ///this function is give a unique names for file 
+function uploadImage($fileInputName) {
+        $target_dir = "uploads/"; // Directory where files will be stored
+        $originalFilename = basename($_FILES[$fileInputName]["name"]);
+        $imageFileType = strtolower(pathinfo($originalFilename, PATHINFO_EXTENSION));
+
+        // Generate a unique ID for this image. For example, use the user ID or another relevant ID
+        $uniqueId = uniqid(); 
+
+        // Create a unique filename for the image
+        $uniqueFilename = $uniqueId . '.' . $imageFileType;
+        $target_file = $target_dir . $uniqueFilename;
+
+        // Attempt to upload the file
+        if (move_uploaded_file($_FILES[$fileInputName]["tmp_name"], $target_file)) {
+            return $uniqueFilename; // Return the unique filename
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+            $_SESSION['signup_error']="Sorry, there was an error uploading your file.";
+            return false; // Return false if the upload failed
+        }
+
     }
-}
-?>

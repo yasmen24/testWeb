@@ -18,21 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         designerForm.style.display = "none";
     });
 
-    const designerSignUpForm = document.getElementById("designerSignUpForm");
-    const clientSignUpForm = document.getElementById("clientSignUpForm");
 
-    designerSignUpForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
-        redirectToHomepage("designer");
-    });
 
-    clientSignUpForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
-        redirectToHomepage("client");
-    });
-
-    function redirectToHomepage(userType) {
-        const homepageUrl = userType === "designer" ? "DesignerHomepage.php" : "Clinet.php";
-        window.location.href = homepageUrl;
-    }
+  
 });

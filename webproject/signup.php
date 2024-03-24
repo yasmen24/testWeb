@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Check if there is a login error message in the session
+if (isset($_SESSION['signup_error'])) {
+    $signup_error = $_SESSION['signup_error'];
+    // Clear the session variable to avoid displaying the same error message again
+    unset($_SESSION['signup_error']);
+} else {
+    $signup_error = null; // Initialize the variable if there is no error message
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,6 +34,12 @@
             </div>
         </header>
 
+        <!-- Display login error message if it exists -->
+    <?php if (!empty($signup_error)): ?>
+        <p><?php echo $signup_error; ?></p>
+    <?php endif; ?>
+        
+        
         <div class="signup-page">
             <h2>Create an Account</h2>
             <p>Select your user type:</p>
