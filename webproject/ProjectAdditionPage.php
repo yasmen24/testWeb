@@ -40,28 +40,20 @@
 						
 						<div class="file">
 							<label for="image">image of the project:</label>;
-							<input type="file" id="image" name="image">
+							<input type="file" id="image" name="file">
 						</div>
 					 
 					 
 					
 						<div class="menu">
 						  <label for="DesignCategory">Choose the Design Category:</label><br>
-						  <select id="DesignSelect" name="DesignSelect" >
-							 <?php
-                                                         $connection = mysqli_connect("localhost", "root", "root", "webproject");
+						  <select id="DesignSelect" name="category" >
+							 <option name="category" value="">select category</option>
+            <option name="category" value="modern">modern</option>
+            <option name="category" value="country">country</option>
+            <option name="category" value="Coastal">Coastal</option>
+            <option name="category" value="Bohemian">Bohemian</option>
 
-                                                                // Check connection
-                                                                   if (mysqli_connect_errno()) {
-                                                                     die("Connection failed: " . mysqli_connect_error());
-                                                                    }
-
-                                                                      $sql='SELECT * FROM designcategory';
-                                                                      $result= mysqli_query($connection, $sql);
-                                                                         while($row= mysqli_fetch_assoc($result))
-                                                                          {
-                                                                          echo "<option value=".$row['ID'].">".$row['category']."</option>"; }
-                                                            ?>
 						  </select>
 						</div>
 						

@@ -1,45 +1,106 @@
-<?php
-session_start();
-include 'DB.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if designer ID is set in the session
-    if (isset($_SESSION['user_id'])) {
-        $designerID = $_SESSION['user_id'];
-        $pName = $_POST['projectname'];
-        $description = $_POST['Descriptiontext'];
-        $category = $_POST['DesignSelect'];
+    <?php
+    session_start();
+    include 'DB.php';
 
-        // Generate unique filename for the uploaded image
-        $imageFileName = $_FILES["image"]["name"];
-        $extension = pathinfo($imageFileName, PATHINFO_EXTENSION);
-        $filenewname = $pName . "_" . uniqid() . "." . $extension;
-        $folder = "images/" . $filenewname;
+    //if(!isset($_SESSION['id'])){
+    //  header('Location: login.php');
+    //exit();
+    //}
+    //$designerID = $_SESSION['id'];
 
-        // Move uploaded file to desired location
-        move_uploaded_file($_FILES["image"]["tmp_name"], $folder);
+    
+    
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Get form data
+        $projectname = $_POST["projectname"];
+        $category = $_POST["category"];
+        $description = $_POST["Descriptiontext"];
 
-        // Retrieve category ID
-        $queryCat = "SELECT id FROM DesignCategory WHERE category='$category'";
-        $result = mysqli_query($conn, $queryCat);
-        if ($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $categoryID = $row['id'];
+        // Handle file upload
+        $target_dir = "image/"; // Directory where images will be stored
+        $target_file = $target_dir . uniqid() . "_" . basename($_FILES["file"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
-            // Insert project into database
-            $sql = "INSERT INTO DesignPortoflioProject (designerID, projectName, projectImgFileName, description, designCategoryID) 
-                    VALUES ($designerID, '$pName', '$filenewname', '$description', $categoryID)";
-            if (mysqli_query($conn, $sql)) {
-                header("Location: DesignerHomepage.php");
-                exit();
-            } else {
-                echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-            }
+        // Check if image file is a actual image or fake image
+        $check = getimagesize($_FILES["file"]["tmp_name"]);
+        if($check !== false) {
+            $uploadOk = 1;
         } else {
-            echo "Error: Category not found";
+            echo "File is not an image.";
+            $uploadOk = 0;
         }
-    } else {
-        echo "Designer ID not found in session.";
+
+        // Check file size
+        if ($_FILES["file"]["size"] > 5000000) {
+            echo "Sorry, your file is too large.";
+            $uploadOk = 0;
+        }
+
+        // Allow certain file formats
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif" ) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+        } else {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+                // Insert data into database
+
+                $sql = "INSERT INTO designportfolioproject (designerID, projectName, projectImgFileName, description, designCategoryID) VALUES (?, ?, ?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                if (!$stmt) {
+                    // Error handling if preparation fails
+                    echo "Error preparing SQL statement: " . $conn->error;
+                    exit();
+                }
+
+                // Assuming designerID and designCategoryID are known and provided
+                $designerID = 1; // Sample designer ID
+                $stmt_category = $conn->prepare("SELECT id FROM DesignCategory WHERE category = ?");
+                $stmt_category->bind_param("s", $category);
+                $stmt_category->execute();
+                $result = $stmt_category->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $designCategoryID = $row['id'];
+                } else {
+                    // Handle if category ID is not found
+                    echo "Error: Category ID not found.";
+                    exit();
+                }
+
+                $stmt->bind_param("isssi", $designerID, $projectname, $target_file, $description, $designCategoryID);
+                if (!$stmt) {
+                    // Error handling if binding parameters fails
+                    echo "Error binding parameters: " . $stmt->error;
+                    exit();
+                }
+
+                // Execute the prepared statement
+                if ($stmt->execute()) {
+                    // Success
+                    echo "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded.";
+                    // Redirect to designer's homepage
+                    header("Location: DesignerHomepage.php");
+                    exit();
+                } else {
+                    // Error handling if execution fails
+                    echo "Error executing prepared statement: " . $stmt->error;
+                    exit();
+                }
+
+                // Close the prepared statement
+                $stmt->close();
+
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
     }
-}
-?>
+    ?>
