@@ -1,7 +1,6 @@
-
 <?php
 session_start();
-include 'db_connection.php';
+include 'DB.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if designer ID is set in the session
