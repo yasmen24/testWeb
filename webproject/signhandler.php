@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // Include database connection
@@ -13,10 +12,10 @@ function hashPassword($password) {
 
 // Function to redirect to homepage based on user type
 function redirectToHomepage($userType) {
-    if ($userType === 'designer') {
-        header('Location: DesignerHomepage.php');
-    } elseif ($userType === 'client') {
+    if ($userType === 'client') {
         header('Location: Clinet.php');
+    } elseif ($userType === 'designer') {
+        header('Location: DesignerHomepage.php');
     }
     exit();
 }
@@ -25,16 +24,15 @@ function redirectToHomepage($userType) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if form was submitted for a designer
     if (isset($_POST['designerSignup'])) {
-        echo 'h';
         $firstName = $_POST['firstName'];
         $lastName = $_POST['lastName'];
         $email = $_POST['email'];
         $password = hashPassword($_POST['password']);
         $brandName = $_POST['brandName'];
+        $selectedSpecialties = $_POST['specialities'];
         
        
        $uniqueImage= uploadImage('logo');
-       echo $uniqueImage;
         if($uniqueImage !=false){
         
         // Check if email is unique
@@ -49,12 +47,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
         // Insert designer into database
-        $sql = "INSERT INTO designer (firstName, lastName, emailAddress, password, brandName,logoImgFileName) VALUES('$firstName','$lastName','$email','$password','$brandName','$brand_logo_filename')";
-        echo 'yesss';
-        if ($result = mysqli_query($conn, $sql)) {
+        $sql = "INSERT INTO designer (firstName, lastName, emailAddress, password, brandName,logoImgFileName) VALUES('$firstName','$lastName','$email','$password','$brandName','$uniqueImage')";
+        
+        if (mysqli_query($conn, $sql)) {
+
+            // Get the inserted designer's ID
+            $designerId = $conn->insert_id;
+
+            // Insert selected specialties into designerspeciality table
+            foreach ($selectedSpecialties as $specialtyId) {
+               
+                $stmt ="INSERT INTO designerspeciality (designerID, designCategoryID) VALUES ('$designerId', '$specialtyId')";
+               
+               mysqli_query($conn, $stmt);
+                
+            }
+            
+            
             // Store user type and ID in session variables
-            $_SESSION['user_type'] = 'designer';
-            $_SESSION['user_id'] = $stmt->insert_id;
+            $_SESSION['userType'] = 'designer';
+            $_SESSION['id'] = $designerId;
+
             // Redirect to designer homepage
             redirectToHomepage('designer');
         } else {
@@ -87,8 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if (mysqli_query($conn, $stmt)){
             // Store user type and ID in session variables
-            $_SESSION['user_type'] = 'client';
-            $_SESSION['user_id'] = $stmt->insert_id;
+            $_SESSION['userType'] = 'client';
+            $_SESSION['id'] = $stmt->insert_id;
             
             // Redirect to client homepage
             redirectToHomepage('client');
