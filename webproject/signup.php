@@ -70,10 +70,17 @@ if (isset($_SESSION['signup_error'])) {
                     <input type="file" id="logo" name="logo" accept="image/*" required>
 
                     <label for="specialities">Specialities:</label>
-                    <input type="checkbox" id="modern" name="specialities[]" value="modern">
-                    <label for="modern">Modern</label>
-                    <input type="checkbox" id="country" name="specialities[]" value="country">
-                    <label for="country">Country</label>
+<input type="checkbox" id="modern" name="specialities[]" value="1">
+<label for="modern">Modern</label>
+
+<input type="checkbox" id="country" name="specialities[]" value="2">
+<label for="country">Country</label>
+
+<input type="checkbox" id="Coastal" name="specialities[]" value="3">
+<label for="Coastal">Coastal</label>
+
+<input type="checkbox" id="Bohemian" name="specialities[]" value="4">
+<label for="Bohemian">Bohemian</label>
                     <!-- Add more checkboxes for other specialities -->
 
                     <input type="submit" name="designerSignup" value="Sign Up">
