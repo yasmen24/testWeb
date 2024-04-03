@@ -1,15 +1,19 @@
 <?php
-    session_start();
+        session_start();
 
-    $connection = mysqli_connect("localhost", "root", "root", "webproject");
-    $error = mysqli_connect_error();
-    if ($error != null) {
-        echo '<p> cant connect to DB<br>';
-    } 
+        // Error reporting
+            error_reporting(E_ALL);
+            ini_set('log_errors', '1');
+            ini_set('display_errors', '1');
+
+        $connection = mysqli_connect("localhost","root","root","webproject", "3306");
+if(mysqli_connect_error()){
+        echo '<p> Sorry can not connect to Data Base </p><br>';
+        die(mysqli_connect_error());
+    }
     else{
-
-
-    if (!isset($_SESSION['id'])) {
+        
+            if (!isset($_SESSION['id'])) {
             echo("<script>alert('You are not logged in, please login or sign up first");
             header("Location: index.php");
             exit();
@@ -21,19 +25,22 @@
         exit();
     }
 
-  
-    $designerID = $_SESSION['id'];
-    $sql = "SELECT id, firstName, lastName, emailAddress, brandName FROM Designer WHERE id = ?";
-    $stmt = $connection->prepare($sql);
-    $stmt->bind_param("i", $designerID);
-    $stmt->execute();
-    $stmt->bind_result($designerID, $firstName, $lastName, $emailAddress, $brandName);
-    $stmt->fetch();
-            //echo "<script>alert(".$designerID.");</script>";
+        if (isset($_SESSION['id'])) { // Check if userID exists in session
 
-    // Close statement
-    $stmt->close();
+            $designerID = $_SESSION['id'];
+            $sql = "SELECT id, firstName, lastName, emailAddress, brandName FROM designer WHERE id = ?";
+            $stmt = $connection->prepare($sql);
+            $stmt->bind_param("i", $designerID);
+            $stmt->execute();
+            $stmt->bind_result($designerID, $firstName, $lastName, $emailAddress, $brandName);
+            $stmt->fetch();
+
+            // Close statement
+            $stmt->close();
+        }
+
     }
+    
 ?>
 
 
@@ -65,7 +72,9 @@
 			<section id="userInfo">
 				<div id="tableHeadr-1"> <!-- Update the comment to reflect the correct ID -->
                                     <h3 id="welcomeText">welcome <?php echo $firstName;?> !</h3>                                   
-                                    <a href="index.php" id="logout">Log-out</a>
+                                    <a href="index.php" id="logout"> 
+                                        <strong> Log-out</strong>
+                                    </a>
                                 </div>
 
 
@@ -78,35 +87,35 @@
                                         <li>Email Address: <span><?php echo $emailAddress;?></span></li>
                                        <!-- <li>Phone: <span>{$designer['phone']}</span></li> -->
                                         <li>Brand Name: <span><?php echo $brandName;?></span></li>
-                                        <li>Logo: <span>
-                                            <?php
-                                            $sqlimg= "SELECT logoImgFileName FROM Designer WHERE id=$designerID";
-                                            if($resultsimg = mysqli_query($connection, $sqlimg)){
-                                                while ($rowimg = mysqli_fetch_assoc($resultsimg)) {
-                                                    echo '<img src="images/'.$rowimg["projectImgFileName"].'" alt="designer\'s logo" width="100" height="100" style="border: solid" >';
-                                                   //echo '<img src="images/GoldenDunes_65fd29d76fd66.jpeg" alt="designer\'s logo" width="100" height="100" style="border: solid" >';
-                                                   //echo '<img src="images/'.$row["projectImgFileName"].'" style="height: 250px; width: 500px;" >';
-                                                
-                                                    //{$designer['logoImgFileName']}
-                                                }
-                                            }
-                                            ?></span></li>
-                                        <li>Specialist in: <span>
-                                            <?php
-                                                $sql1= "SELECT d.*, dc.category_name 
-                                                        FROM designers d 
-                                                        INNER JOIN DesignCategory dc ON d.category_id = dc.category_id
-                                                        WHERE d.id = '$designerID'";
-                                                if($results1 = mysqli_query($connection, $sql1)){
-                                                    if ($result1->num_rows > 0) {
-                                                        while ($row1 = $result1->fetch_assoc()) {
-                                                            echo "<option name='" . $row1['category'] . "' value='" . $row1['category'] . "'>" . $row1['category'] . "</option>";
+                                        <li>Logo: <span><?php
+                                                        $sqlForImg= "SELECT logoImgFileName FROM designer WHERE id=$designerID";
+                                                        if($resultForImg = mysqli_query($connection, $sqlForImg)){
+                                                            while ($rowFORImg = mysqli_fetch_assoc($resultForImg)) {
+                                                                echo "<img src='uploads/" . $rowFORImg['logoImgFileName'].'" alt="designer\'s logo" width="100" height="100" style="border: solid" >';
+                                                           }
                                                         }
-                                                    } else {
-                                                        echo "No specialist categories found";
-                                                    }
-                                                }
-                                            ?></span></li>
+                                                    ?></span></li>
+                                        
+                                        <li>Specialties: <span>
+                                            <?php    
+                                            $sqlspec = "SELECT dc.category
+                                                 FROM designerspeciality ds
+                                                 INNER JOIN designcategory dc ON ds.designCategoryID = dc.id
+                                                 WHERE ds.designerID = '$designerID'";
+                                         $resultspec = mysqli_query($connection, $sqlspec);
+
+                                         $specialties = array(); // Initialize an empty array to store specialties
+
+                                         if (mysqli_num_rows($resultspec) > 0) {
+                                             while ($row = mysqli_fetch_assoc($resultspec)) {
+                                                 $specialties[] = $row['category']; // Add each specialty to the array
+                                             }
+                                             // Join specialties array elements with comma and display
+                                             echo "Specialties: " . implode(", ", $specialties);
+                                         } else {
+                                             echo "No specialties found for this designer.";
+                                         }
+                                         ?> </span></li>
                                     </ul>
                                     
 				</div>
@@ -118,7 +127,9 @@
                                 <section id="table1">
                                         <div id="tableHeadr-2">
                                                 <h1>Design Portfolio</h1>
-                                                <a href="ProjectAdditionPage.php" id="logout">Add New Project</a>
+                                                <a href="ProjectAdditionPage.php" id="addProject">
+                                                    <strong style="font-size: 1.25em;">Add New Project</strong>
+                                                </a>
                                         </div>
 
                                         <table class="table1">
@@ -128,42 +139,46 @@
                                                     <th>Image</th>
                                                     <th>Design Category</th>
                                                     <th>Description</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                    <?php
-                                                    // Prepare SQL statement to fetch projects from the designer's portfolio along with design category
-                                                    /* $designerID = $_SESSION['designerID'];
-                                                    $sql2 = "SELECT p.*, dc.category
-                                                        FROM DesignPortoflioProject p 
-                                                        INNER JOIN DesignCategory dc ON p.designCategoryID = dc.id
-                                                        WHERE p.designerID = $designerID";
-                                                    */
-                                                    // Execute SQL statement
-                                                   
-                                                        $sql2 = "SELECT p.projectName, p.projectImgFileName AS image, dc.category AS designCategory, p.description
-                                                                FROM DesignPortoflioProject p 
-                                                                INNER JOIN DesignCategory dc ON p.designCategoryID = dc.id
-                                                                WHERE p.designerID = ?";
-                                                         $result2 = mysqli_query($connection, $sql2);
-                                                        // Prepare and bind parameters for the query
-                                                        if ($result2->num_rows > 0) {
-                                                            while ($row = $result2->fetch_assoc()) {
-                                                                echo '<tr>';
-                                                                echo '<td>' . $row["projectName"] . '</td>';
-                                                                echo '<td><img src="images/' . $row["projectImgFileName"] . '" style="height: 250px; width: 500px;" ></td>';
-                                                                echo '<td>' . $row['category'] . '</td>';
-                                                                echo '<td>' . $row['description'] . '</td>';
-                                                                
-                                                                //edit and delete links
-                                                                echo '<td><a href="EditProject.php?project_id=' . $row["id"] . '">Edit</a></td>';
-                                                                echo '<td><a href="DeleteProject.php?project_id=' . $row["id"] . '">Delete</a></td>';
+                                                    <?php                        
+                                                        $sql = "SELECT * FROM designportfolioproject WHERE designerID = '$designerID'";
+                                                        //echo "SQL Query: $sql";
+                                                        $result = mysqli_query($connection, $sql);
+                                                        if (!$result) {
+                                                            die('Error in executing SQL query: ' . mysqli_error($connection));
+                                                        }
+                                                        if (mysqli_num_rows($result) == 0) {
+                                                            echo "No rows returned from the query."; // Check if any rows are returned
+                                                        } else {
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                              echo "<tr>";
+                                                        echo "<td>" . $row['projectName'] . "</td>";
+                                                        echo "<td><img src='uploads/" . $row['projectImgFileName'] . "' alt='" . $row['projectName'] . "'></td>";
 
-                                                                echo '</tr>';
+                                                        // Query to fetch design category for the current project
+                                                        $sql2 = 'SELECT category FROM DesignCategory WHERE id = ' . $row["designCategoryID"];
+                                                        if ($result2 = mysqli_query($connection, $sql2)) {
+                                                            if ($row2 = mysqli_fetch_assoc($result2)) {
+                                                                echo "<td>" . $row2['category'] . "</td>";
+                                                            } else {
+                                                                echo '<td>No category found</td>'; // If no category found for the project
                                                             }
-                                                        } 
-                                                        ?>
-                                                    
+                                                        } else {
+                                                            echo '<td>No category found</td>'; // If no category found for the project
+                                                        }
+
+                                                        echo "<td>" . $row['description'] . "</td>";
+                                                        echo "<td><a href='UpdatePage.php?projectId=" . $row['id'] . "'><strong>Edit</strong></a></td>";
+                                                        echo "<td><a href='DeletePage.php?projectId=" . $row['id'] . "'><strong>Delete</strong></a></td>";
+                                                        echo "</tr>";
+
+                                                            }
+                                                        }
+                                                    ?>   
+  
                                             </tbody>
                                         </table>
                         </section>
@@ -173,56 +188,61 @@
 
                             <table class="table2">
                                     <thead>
-                                            <tr>
-                                                <th>Client</th>
-                                                <th>Room</th>
-                                                <th>Dimensions</th>
-                                                <th>Design Category</th>
-                                                <th>Color Preferences</th>
-                                                <th>Date</th>
-                                            </tr>
-                                    </thead>	
+                                    <tr>
+                                        <th>Clint</th>
+                                        <th>Room</th>
+                                        <th>Dimension</th>
+                                        <th>Design Category</th>
+                                        <th>Color Preferences</th>
+                                        <th>Date</th>            
+                                    </tr>
+                                </thead>	
                                     
                                     <tbody>
-                                    <?php
-                                        $sql3 = 'SELECT * FROM DesignConsultationRequest WHERE designerID = '.$designerID.' AND statusID=1';
-                                        $results3 = mysqli_query($connection, $sql3);
-                                        
-                                            while ($row = mysqli_fetch_assoc($results3)) {
-                                                $id = $row['id'];
-                                                $cName = 'SELECT firstName AS f, lastName AS l FROM Client WHERE id = '.$row['clientID'].'';
-                                                $rType = 'SELECT type FROM RoomType WHERE id = '.$row['roomTypeID'].'';
-                                                $dCategory = 'SELECT category FROM DesignCategory WHERE id= '.$row['designCategoryID'].'';
+                                <?php
+                                      $sql3 = 'SELECT dcr.*, c.firstName AS clientFirstName, c.lastName AS clientLastName, rt.type AS roomType, dc.category AS designCategory 
+                                                FROM designconsultationrequest AS dcr
+                                                INNER JOIN RequestStatus AS rs ON dcr.statusID = rs.id
+                                                INNER JOIN Client AS c ON dcr.clientID = c.id
+                                                INNER JOIN RoomType AS rt ON dcr.roomTypeID = rt.id
+                                                INNER JOIN DesignCategory AS dc ON dcr.designCategoryID = dc.id
+                                                WHERE dcr.designerID = '.$designerID.' AND rs.status = "pending consultation"';
 
-                                                mysqli_query($connection, $cName);
-                                                mysqli_query($connection, $rType);
-                                                mysqli_query($connection, $dCategory);
+                                       $results3 = mysqli_query($connection, $sql3);
 
-                                                echo"<tr>";
+                                       while ($row = mysqli_fetch_assoc($results3)) {
+                                           echo "<tr>";
+                                           echo "<td>".$row['clientFirstName']." ".$row['clientLastName']."</td>"; // Client name
+                                           echo "<td>".$row['roomType']."</td>"; // Room type
+                                           echo "<td>".$row['roomWidth']."x".$row['roomLength']."m</td>"; // Room dimensions
+                                           echo "<td>".$row['designCategory']."</td>"; // Design category
+                                           echo "<td>".$row['colorPreferences']."</td>"; // Color preferences
+                                           echo "<td>".$row['date']."</td>"; // Date
+                                           echo "<td><a href='DesignConsultationPage.php?requestID=" . $row['id'] . "'><strong>Provide Consultation</strong></a></td>";
+                                           echo "<td><a href='DeclineConsultationPage.php?requestID=" . $row['id'] . "'><strong>Decline Consultation</strong></a></td>";
+                                           echo "</tr>";
+                                                //echo '<th><a class="provide-decline" href="designconsultation.php?requestID=.$row['id'] ."><strong style="background-color: #F6F6F6">Provide Consultation</strong></a></th>';
+                                                //$prov = 'UPDATE designconsultationrequest SET statusID=3 WHERE id='.$row['id'].'';
+                                                //echo '<th><a class="provide-decline" href="declineConsultation.php?requestID='.$id.'"><strong style="background-color: #F6F6F6">Decline Consultation</strong>/a></th>';
+     
 
-                                                    if($resultsName = mysqli_query($connection, $cName)){
-                                                        while ($rowName = mysqli_fetch_assoc($resultsName)){
-                                                            echo'<td>'.$rowName['f'].' '.$rowName['l'].'</td>'; // client name
-                                                    }}
-                                                    if($resultsType = mysqli_query($connection, $rType)){
-                                                        while ($rowType = mysqli_fetch_assoc($resultsType)){
-                                                            echo'<td>'.$rowType["type"].'</td>'; // room type
-                                                    }}
-                                                    echo'<td>'.$row["roomWidth"].'x'.$row["roomLength"].'m</td>'; //done                                        
-                                                    if($resultsCate = mysqli_query($connection, $dCategory)){
-                                                        while ($rowCate = mysqli_fetch_assoc($resultsCate)){
-                                                            echo'<td>'.$rowCate["category"].'</td>'; // Design Category
-                                                    }}
-                                                    echo'<td>'.$row["colorPreferences"].'</td>'; //done
-                                                    echo'<td>'.$row["date"].'</td>';
-
-
-                                                    echo'<th><a href="Design consultation page.php?requestID='.$id.'">Provide Consultation</a></th>';
-                                                    echo'<th><a href="DeclineConsultation.php?requestID='.$id.'">Decline Consultation</a></th>';
-                                                    echo"</tr>";
-                                            }                           
-                                    ?>
-                                </tbody>
+                                        }                     
+                                ?>
+                                </tbody>    
+                                <tr>
+                                    <td>Sara AlQabbani</td>
+                                    <td>Bedroom</td>
+                                    <td>3*4m</td>
+                                    <td>Coastal</td>
+                                    <td>Blue and White</td>
+                                    <td>15/1/2024</td>
+                                    <td>
+                                        <a href="DesignConsultationPage.php"><strong>Provide Consultation</strong></a>
+                                    </td>
+                                    <td>
+                                        <a href=""><strong>Decline Consultation</strong></a>
+                                    </td>
+                                </tr>
                                 </table>
                             </section>
                         </section>	
