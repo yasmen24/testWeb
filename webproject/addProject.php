@@ -3,11 +3,11 @@
     session_start();
     include 'DB.php';
 
-    //if(!isset($_SESSION['id'])){
-    //  header('Location: login.php');
-    //exit();
-    //}
-    //$designerID = $_SESSION['id'];
+    if(!isset($_SESSION['id'])){
+      header('Location: login.php');
+    exit();
+    }
+    $designerID = $_SESSION['id'];
 
     
     
@@ -62,7 +62,7 @@
                 }
 
                 // Assuming designerID and designCategoryID are known and provided
-                $designerID = 1; // Sample designer ID
+                //$designerID = 1; // Sample designer ID
                 $stmt_category = $conn->prepare("SELECT id FROM DesignCategory WHERE category = ?");
                 $stmt_category->bind_param("s", $category);
                 $stmt_category->execute();
