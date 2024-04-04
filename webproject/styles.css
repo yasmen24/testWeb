@@ -78,6 +78,18 @@ input[type="submit"]:hover {
 }
 .homepage h1 {
 
-color : rgb(149, 159, 135)
+color : rgb(149, 159, 135);
 
+}
+
+  .error {
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    background-color: #ff000052; /* Corrected color code */
+    padding: 10px; /* Adding padding for better visibility */
+    width: 50%;
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it takes up the specified width */
 }

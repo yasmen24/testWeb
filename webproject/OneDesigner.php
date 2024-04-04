@@ -1,8 +1,7 @@
-<?php
-    /*Checks the designer id that is sent in the query string, retrieves all the projects that the
+<?php /*Checks the designer id that is sent in the query string, retrieves all the projects that the
     designer has in the designer’s design portfolio and displays them in a table that includes 4
-    columns: the project name, image, design category, and description
-    session_start();*/
+    columns: the project name, image, design category, and description*/
+    session_start();
     
     if(!isset($_SESSION['designerID'])){ //If the designerID is not set onto session variable, we go back to Clinet.php to set it again
         header("Location: index.php");
@@ -43,7 +42,7 @@
 	<section id="table1">
             <div id="tableHeadr-2">
                 <h1>Design Portfolio</h1>
-		<a href="ProjectAdditionPage.php" id="logout">Add New Project</a>
+<!--		<a href="ProjectAdditionPage.php" id="logout">Add New Project</a>-->
             </div>		
 		<table class="table1">
 		<thead>
@@ -60,16 +59,14 @@
                         <td><img src="image/bedroom.jpg" alt="Minimalist bedroom"></td>
                         <td>Minimalist</td>
                         <td class="des">A simple bedroom with clean lines, highlighted by a white bed.</td>
-                        <td><a href="UpdatePage.php">Edit</a></td>
-                        <td><a href="#">Delete</a></td>
+                   
                     </tr>			
                     <tr>
                         <td>living room</td>
                         <td><img src="image/livingroom.jpg" alt="Modern living room"></td>
                         <td>Modern</td>
                         <td class="des">A modern living room features sleek design,and a neutral color palette.</td>
-                        <td><a href="UpdatePage.php">Edit</a></td>
-                        <td><a href="#">Delete</a></td>
+                       
                     </tr>
                         <?php
                             $designerID = $_SESSION['designerID'];
@@ -91,8 +88,6 @@
                                     echo "<td><img src='".$row['projectImgFileName']."' alt='Modern living room'></td>";
                                     echo "<td>".$row['category']."</td>";
                                     echo "<td class='des'>".$row['description']."</td>";
-                                    echo "<td><a href='UpdatePage.php'>Edit</a></td>";
-                                    echo "<td><a href='#'>Delete</a></td>";
                                     echo "</tr>";
                                 }
                             }  

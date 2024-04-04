@@ -20,6 +20,20 @@ if (isset($_SESSION['login_error'])) {
     <link rel="stylesheet" href="styles.css">
     <!--<script src="scriptlog.js" defer></script>-->
     <title>DesignConnect - Login</title>
+     <style>
+      
+.error {
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    background-color: #ff000052; /* Corrected color code */
+    padding: 10px; /* Adding padding for better visibility */
+    width: 50%;
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it takes up the specified width */
+}
+   </style>
 </head>
 <body>
     
@@ -44,7 +58,7 @@ if (isset($_SESSION['login_error'])) {
         
            <!-- Display login error message if it exists -->
     <?php if (!empty($login_error)): ?>
-        <p><?php echo $login_error; ?></p>
+        <p class="error"><?php echo $login_error; ?></p>
     <?php endif; ?>
         
     <div class="login-page">
