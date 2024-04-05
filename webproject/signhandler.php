@@ -101,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (mysqli_query($conn, $stmt)){
             // Store user type and ID in session variables
             $_SESSION['userType'] = 'client';
-            $_SESSION['id'] = $conn->insert_id;
-            echo $_SESSION['id'];
+            $_SESSION['id'] = $stmt->insert_id;
+            
             // Redirect to client homepage
             redirectToHomepage('client');
         } else {

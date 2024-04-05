@@ -16,14 +16,6 @@ function redirectToHomepage($userType) {
     exit();
 }
 
-function verifyPassword($password, $hashedPassword) {
-    // Use password_verify() function to compare the password with its hash
-    if (password_verify($password, $hashedPassword)) {
-        return true; // Passwords match
-    } else {
-        return false; // Passwords don't match
-    }
-}
 
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -51,8 +43,7 @@ if ($row != null) {
   // Hash the password retrieved from the database
     //$hashedPasswordFromDB = password_hash($row['password'], PASSWORD_DEFAULT);
        
-
-    if (verifyPassword($password, $row['password'])){
+    if ($password === $row['password']){
         $_SESSION['id'] = $row['id'];
         $_SESSION['userType'] = ($userType === 'designer') ? 'designer' : 'client';
         redirectToHomepage($userType);

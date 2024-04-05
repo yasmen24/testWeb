@@ -4,31 +4,21 @@ include_once 'DB.php';
 include_once'fileUpload.php';
 
 session_start();
-$clientID = $_SESSION['id'];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = [];
     // Retrieve all the form input from RequestDesignConsultation.php
-  
+    $clientID = $_SESSION['id'];
+   
     $designerID = $_POST['designerID'];
   $roomType = $_POST['roomType']; 
-  if(empty($roomType)){
-   $_POST['roomType']="Living Room";
-  $roomType="Living Room";
-  
-  }
 
     $designCategoryID =getCategoryOrId( $_POST['designCategory'], $conn); 
-    
-      if(empty($designCategoryID)){$_POST['designCategory']="Modern";$designCategoryID=$_POST['designCategory'];}
-
     $width = $_POST['width'];
     $length = $_POST['length'];
     $colorPreferences = $_POST['colorPreferences'];
     // Retrieve roomTypeID based on room type
-$roomTypeID= getroomTypeOrId($roomType,$conn);
-
-if (empty($designerID) || empty($roomTypeID) || empty($designCategoryID) || empty($width) || empty($length) || empty($colorPreferences)) {
+$roomTypeID= getroomTypeOrId($_POST['roomType'],$conn);
+if (empty($designerID) || empty($roomType) || empty($designCategoryID) || empty($width) || empty($length) || empty($colorPreferences)) {
         $errors[] = "All fields are required.";
     }
     
@@ -40,7 +30,7 @@ if (empty($designerID) || empty($roomTypeID) || empty($designCategoryID) || empt
     if (!empty($errors)) {
         $_SESSION['form_errors'] = $errors;
         header('Location: RequestDesignConsultation.php'); // Adjust to your form's actual URL
-       exit;
+        exit;
     }
 $statusID=1;
  ////here will insert the string as numric
@@ -70,13 +60,13 @@ if ($stmt->execute()) {
             die("Error binding parameters for update: " . $stmtUpdate->error);
         }
         if ($stmtUpdate->execute()) {
-           header('Location: Clinet.php');
-           echo "Color preferences updated successfully.";
+            header('Location: Clinet.php');
+            echo "Color preferences updated successfully.";
         } else {
             echo "Error updating color preferences: " . $stmtUpdate->error;
         }
         $stmtUpdate->close();
-        header('Location: Clinet.php');
+    
 } else {
     echo "Error executing statement: " . $stmt->error;
 }
