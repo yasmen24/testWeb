@@ -50,6 +50,33 @@ if(mysqli_connect_error()){
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title> Designer Homepage </title>
+                        <style>
+                            /* Style for designer information */
+                            ul.designer-info {
+                                list-style-type: none;
+                                padding: 0;
+                            }
+
+                            ul.designer-info li {
+                                margin-bottom: 10px;
+                            }
+
+                            ul.designer-info li span {
+                                font-weight: bold;
+                            }
+
+                            .logo-container {
+                                display: flex; /* Use flexbox */
+                                align-items: center; /* Center the content vertically */
+                            }
+
+                            .logo-container img {
+                                max-width: 100px; /* Limit the maximum width of the logo */
+                                max-height: 100px; /* Limit the maximum height of the logo */
+                                margin-left: 10px; /* Add some spacing between the logo and the other information */
+                                border-radius: 20%; /* Make the image rounded */
+                            }
+                        </style>
 			<link rel="stylesheet" href="Designer.css">
 			<link rel="stylesheet" href="basics.css">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -81,22 +108,13 @@ if(mysqli_connect_error()){
 
 				<div id="designerInfo">
                                     
-                                    <ul>
+                                    <ul class="designer-info">
                                         <li>First Name: <span><?php echo $firstName;?></span></li>
                                         <li>Last Name: <span><?php echo $lastName;?></span></li>
                                         <li>Email Address: <span><?php echo $emailAddress;?></span></li>
-                                       <!-- <li>Phone: <span>{$designer['phone']}</span></li> -->
+                                        <!-- <li>Phone: <span>{$designer['phone']}</span></li> -->
                                         <li>Brand Name: <span><?php echo $brandName;?></span></li>
-                                        <li>Logo: <span><?php
-                                                        $sqlForImg= "SELECT logoImgFileName FROM designer WHERE id=$designerID";
-                                                        if($resultForImg = mysqli_query($connection, $sqlForImg)){
-                                                            while ($rowFORImg = mysqli_fetch_assoc($resultForImg)) {
-                                                                echo "<img src='uploads/" . $rowFORImg['logoImgFileName'].'" alt="designer\'s logo" width="100" height="100" style="border: solid" >';
-                                                           }
-                                                        }
-                                                    ?></span></li>
-                                        
-                                        <li>Specialties: <span>
+                                        <li><span>
                                             <?php    
                                             $sqlspec = "SELECT dc.category
                                                  FROM designerspeciality ds
@@ -115,8 +133,20 @@ if(mysqli_connect_error()){
                                          } else {
                                              echo "No specialties found for this designer.";
                                          }
-                                         ?> </span></li>
+                                         ?></span></li>
+                                        <li class="logo-container"> <!-- Add a class to the logo container -->
+                                            Logo: <span><?php
+                                                        $sqlForImg= "SELECT logoImgFileName FROM designer WHERE id=$designerID";
+                                                        if($resultForImg = mysqli_query($connection, $sqlForImg)){
+                                                            while ($rowFORImg = mysqli_fetch_assoc($resultForImg)) {
+                                                                echo "<img src='uploads/" . $rowFORImg['logoImgFileName'] . "' alt='designer\'s logo'>";
+                                                           }
+                                                        }
+                                                    ?>
+                                            </span>
+                                        </li>
                                     </ul>
+
                                     
 				</div>
 			
@@ -143,18 +173,17 @@ if(mysqli_connect_error()){
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                    <?php                        
-                                                        $sql = "SELECT * FROM designportfolioproject WHERE designerID = '$designerID'";
-                                                        //echo "SQL Query: $sql";
-                                                        $result = mysqli_query($connection, $sql);
-                                                        if (!$result) {
-                                                            die('Error in executing SQL query: ' . mysqli_error($connection));
-                                                        }
-                                                        if (mysqli_num_rows($result) == 0) {
-                                                            echo "No rows returned from the query."; // Check if any rows are returned
-                                                        } else {
-                                                                while ($row = mysqli_fetch_assoc($result)) {
-                                                              echo "<tr>";
+                                                <?php
+                                                $sql = "SELECT * FROM designportfolioproject WHERE designerID = '$designerID'";
+                                                $result = mysqli_query($connection, $sql);
+                                                if (!$result) {
+                                                    die('Error in executing SQL query: ' . mysqli_error($connection));
+                                                }
+                                                if (mysqli_num_rows($result) == 0) {
+                                                    echo '<tr><td colspan="6"><div class="newProject">New designer without any existing projects, please include the new project provided via the link above</div></td></tr>';
+                                                } else {
+                                                    while ($row = mysqli_fetch_assoc($result)) {
+                                                        echo "<tr>";
                                                         echo "<td>" . $row['projectName'] . "</td>";
                                                         echo "<td><img src='uploads/" . $row['projectImgFileName'] . "' alt='" . $row['projectName'] . "'></td>";
 
@@ -171,15 +200,14 @@ if(mysqli_connect_error()){
                                                         }
 
                                                         echo "<td>" . $row['description'] . "</td>";
-                                                        echo "<td><a href='UpdatePage.php?projectId=" . $row['id'] . "'><strong>Edit</strong></a></td>";
-                                                        echo "<td><a href='DeletePage.php?projectId=" . $row['id'] . "'><strong>Delete</strong></a></td>";
+                                                        echo "<td><a href='UpdatePage.php?projectId=" . $row['id'] . "' style='display: inline-block; padding: 10px 20px;'><strong>Edit</strong></a></td>";
+                                                        echo "<td><a href='DeletePage.php?projectId=" . $row['id'] . "' style='display: inline-block; padding: 10px 20px;'><strong>Delete</strong></a></td>";
                                                         echo "</tr>";
-
-                                                            }
-                                                        }
-                                                    ?>   
-  
+                                                    }
+                                                }
+                                                ?>
                                             </tbody>
+
                                         </table>
                         </section>
 			
@@ -230,12 +258,12 @@ if(mysqli_connect_error()){
                                 ?>
                                 </tbody>    
                                 <tr>
-                                    <td>Sara AlQabbani</td>
-                                    <td>Bedroom</td>
-                                    <td>3*4m</td>
-                                    <td>Coastal</td>
-                                    <td>Blue and White</td>
-                                    <td>15/1/2024</td>
+                                    <td>Noura Ahmad</td>
+                                    <td>Office</td>
+                                    <td>5*4m</td>
+                                    <td>Modern</td>
+                                    <td>Black and White</td>
+                                    <td>1/4/2024</td>
                                     <td>
                                         <a href="DesignConsultationPage.php"><strong>Provide Consultation</strong></a>
                                     </td>
