@@ -43,7 +43,7 @@ if ($row != null) {
   // Hash the password retrieved from the database
     //$hashedPasswordFromDB = password_hash($row['password'], PASSWORD_DEFAULT);
        
-    if (password_verify($_POST['password'], $row['password'])){
+    if ($password === $row['password']){
         $_SESSION['id'] = $row['id'];
         $_SESSION['userType'] = ($userType === 'designer') ? 'designer' : 'client';
         redirectToHomepage($userType);

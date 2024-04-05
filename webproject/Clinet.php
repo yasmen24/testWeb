@@ -159,7 +159,7 @@ $consultationRequests = fetchConsultationRequests($clientId);
                 </a>
             </td>
             <td><?php echo $designer['specialties']; ?></td>
-            <td><a href="RequestDesignConsultation.php?designerId=<?php echo $designer['id']; ?>">Request Design Consultation</a></td>
+            <td><a href="RequestDesignConsultation.php?designerId=<?php echo $designer['id']; ?>&clientId=<?php echo $client['id']; ?>">Request Design Consultation</a></td>
         </tr>
         <?php endforeach; ?>
               </tr>
