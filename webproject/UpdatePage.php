@@ -21,31 +21,43 @@
         </div>
         <?php
 
-        $connection = mysqli_connect("localhost", "root", "root", "webproject");
+      include 'DB.php';
 
-        // Check connection
-        if (mysqli_connect_errno()) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        else {
-           if(isset($_GET['id'])) {
-               $projectid =$_GET['id'];
-               $sql = "SELECT * FROM designportfolioprojec wHERE Id=$projectid";
-               $result = mysqli_query($connection, $sql);
-               if (isset($result)) {
-                   $row =mysqli_fetch_assoc($result);
-                   $projn = $row['projectname'];
-                   $image = $row['projectImgFIleName'];
-                   $description =$row['description'];
-                   $category =$row['designCategoryID ']; }
-                   
-             } } 
+     if(isset($_GET['projectId'])) {
+        $projectId = $_GET['projectId'];
+
+        // Fetch project details from the database based on the project ID
+        $sql = "SELECT * FROM designportfolioproject WHERE Id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $projectId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        // Check if the project exists
+            if($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                // Assign retrieved data to variables
+                $projn = $row['projectName'];                
+               $image = $row['projectImgFileName'];
+                $description = $row['description'];
+                $category = getCategoryOrId( $row['designCategoryID'], $conn);
+
+        }  else {
+                // Handle case when project is not found
+                echo "Project not found!";
+                exit();
+            }
+     }else {
+    // Handle case when project ID is not provided in the URL
+    echo "Project ID not provided!";
+    exit();
+     }
+
            
         ?>
 
     </header>    
     <section>
-        <form action="UpdatePage.php" method="post" name="ProjectUpdateForm" enctype="multipart/form-data"  >
+        <form action="updateHandelrPage.php" method="POST" name="ProjectUpdateForm" enctype="multipart/form-data"  >
         <h1> Edit Project </h1>
         
                 <!-- Hidden input field to store project ID -->
@@ -54,28 +66,29 @@
             <!--project name-->
             <div class="Pname">
                 <label for="ProjectName" >Project Name:</label>
-                <input type="text" id="ProjectName"name='ProjectName' value="<?php echo $projn ?> "<br>
+                <input type="text" id="ProjectName"name='ProjectName' value="<?php echo $projn ?> ">
             </div>
             
             <!--project logo-->
             <div class="Plogo">
                 <label for="image">Insert logo brand:</label>
-                <input type="file" id="image" name="image" <?php echo $image ?> ><br>
+               <input type="file" id="image" name="image"   ><br>
+               
             </div>
 
             <!--drop down menue-->
             <div class="Pmenue">
-            <label for="drop-downMenue">Select Category:</label>
-                        <select name="drop-downMenue" class="drop-downMenue">
-                            <option value="Minimalist" <?php if($category == "Minimalist") echo "selected"; ?>> Minimalist</option>
-                            <option value="Modern" <?php if($category == "Modern") echo "selected"; ?> >Modern</option>
-                            <option value="Country" <?php if($category == "Country") echo "selected"; ?> >Country</option>
-                            <option value="Coastal" <?php if($category == "Coastal") echo "selected"; ?>>Coastal</option>
-                            <option value="Bohemian" <?php if($category == "Bohemian") echo "selected"; ?>>Bohemian</option>
-                           
-                        </select><br>
+           <label for="drop-downMenue">Select Category:</label>
+            <select name="drop-downMenue" class="drop-downMenue">
+                <option value="Minimalist" <?php if($category == "Minimalist") echo "selected"; ?>>Minimalist</option>
+                <option value="Modern" <?php if($category == "Modern") echo "selected"; ?>>Modern</option>
+                <option value="Country" <?php if($category == "Country") echo "selected"; ?>>Country</option>
+                <option value="Coastal" <?php if($category == "Coastal") echo "selected"; ?>>Coastal</option>
+                <option value="Bohemian" <?php if($category == "Bohemian") echo "selected"; ?>>Bohemian</option>
+            </select><br>
+
                     </div>        
-            <!--description (text area)-->
+<!--            description (text area)-->
             <div class="Pdescription">
             <textarea  name='desc' placeholder="design description..." cols="30%" rows="5%"  ><?php echo $description ?></textarea><br>
             </div>
@@ -89,10 +102,9 @@
     </section>
  
 
-    <script src="UpdatePage.js"></script>
+<!--    <script src="UpdatePage.js"></script>-->
     <footer id="Home-footer">
 
-        <!-- Multimedia -->
 
         <div class="multimedia" >
 
@@ -113,25 +125,32 @@
    
    <?php
 
- if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
+include 'fileUpload.php';
+
     
-    $projn = $_POST['ProjectName'];
-    $image = $_POST['image'];
-    $description =$_POST['desc'];
-    $category =$_POST['drop-downMenue'];
-   
-
-    // Update project in the database
-  
-    $sql = "UPDATE designportoflioproject SET projectname = ?, projectImgFIleName = ?,description= ?,designCategoryID = ?, WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssi", $projn, $image, $description, $category , $projectId);
-   
-
-        header("Location: DesignerHomepage.php");
-            exit();
-        
+    
+    function getCategoryOrId($input, $conn) {
+    // Check if the input is numeric or a string
+    if (is_numeric($input)) {
+        // Input is numeric, so retrieve the corresponding category
+        $sql = "SELECT category FROM designcategory WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $input); // Assuming input is an integer (ID)
+        $stmt->execute();
+        $stmt->bind_result($category);
+        $stmt->fetch();
+        return $category;
+    } else {
+        // Input is a string, so retrieve the corresponding ID
+        $sql = "SELECT id FROM designcategory WHERE category = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $input); // Assuming input is a string (category)
+        $stmt->execute();
+        $stmt->bind_result($id);
+        $stmt->fetch();
+        return $id;
+    }
 }
+
 
 ?>

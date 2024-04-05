@@ -31,4 +31,31 @@ function uploadImageAndSaveFilename($conn, $tableName,$column) {
     } else {
         echo "No file submitted.";
 }}
+
+
+
+
+function uploadImage($fileInputName) {
+        $target_dir = "uploads/"; // Directory where files will be stored
+        $originalFilename = basename($_FILES[$fileInputName]["name"]);
+        $imageFileType = strtolower(pathinfo($originalFilename, PATHINFO_EXTENSION));
+
+        // Generate a unique ID for this image. For example, use the user ID or another relevant ID
+        $uniqueId = uniqid(); 
+
+        // Create a unique filename for the image
+        $uniqueFilename = $uniqueId . '.' . $imageFileType;
+        $target_file = $target_dir . $uniqueFilename;
+
+        // Attempt to upload the file
+        if (move_uploaded_file($_FILES[$fileInputName]["tmp_name"], $target_file)) {
+            return $uniqueFilename; // Return the unique filename
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+            $_SESSION['signup_error']="Sorry, there was an error uploading your file.";
+            return false; // Return false if the upload failed
+        }
+
+    }
+    
 ?>

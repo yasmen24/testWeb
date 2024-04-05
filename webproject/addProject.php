@@ -2,6 +2,7 @@
     <?php
     session_start();
     include 'DB.php';
+    include 'fileUpload.php';
 
     if(!isset($_SESSION['id'])){
       header('Location: login.php');
@@ -18,8 +19,12 @@
         $description = $_POST["Descriptiontext"];
 
         // Handle file upload
-        $target_dir = "image/"; // Directory where images will be stored
-        $target_file = $target_dir . uniqid() . "_" . basename($_FILES["file"]["name"]);
+        $target_dir = "uploads/"; // Directory where images will be stored
+        $image=uniqid() . "_" . basename($_FILES["file"]["name"]);
+        
+//        $target_file = $target_dir . uniqid() . "_" . basename($_FILES["file"]["name"]);
+           $target_file = $target_dir. $image;
+
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
@@ -75,7 +80,7 @@
                     exit();
                 }
 
-                $stmt->bind_param("isssi", $designerID, $projectname, $target_file, $description, $designCategoryID);
+                $stmt->bind_param("isssi", $designerID, $projectname, $image, $description, $designCategoryID);
                 if (!$stmt) {
                     // Error handling if binding parameters fails
                     echo "Error binding parameters: " . $stmt->error;
@@ -103,4 +108,6 @@
             }
         }
     }
+    
+    
     ?>
