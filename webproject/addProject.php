@@ -13,6 +13,18 @@
     
     
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
+        					 
+       
+            if (empty($_POST["projectname"]) || empty($_FILES["file"]["name"]) || empty($_POST["category"]) || empty($_POST["Descriptiontext"])) {
+    $_SESSION['project_error'] = 'Please enter values in all fields.';
+    header("Location: ProjectAdditionPage.php");
+    
+}
+
+        
+       
+        
         // Get form data
         $projectname = $_POST["projectname"];
         $category = $_POST["category"];

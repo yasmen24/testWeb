@@ -1,11 +1,34 @@
+<?php
+session_start();
 
+// Check if there is a login error message in the session
+if (isset($_SESSION['project_error'])) {
+    $project_error = $_SESSION['project_error'];
+    // Clear the session variable to avoid displaying the same error message again
+    unset($_SESSION['project_error']);
+} else {
+    $project_error = null; // Initialize the variable if there is no error message
+}
+?>
 <!DOCTYPE html>
-
-
 <html lang="en">
 		<head>
 			<meta charset="utf-8">
 			<title> Project Addition </title>
+                            <style>
+      
+.error {
+    color: white;
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    background-color: #ff000052; /* Corrected color code */
+    padding: 10px; /* Adding padding for better visibility */
+    width: 50%;
+    margin: 0 auto; /* Center horizontally */
+    display: block; /* Ensure it takes up the specified width */
+}
+   </style>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
 			<link rel="stylesheet" href="DesignerAdd.css">
 			<link rel="stylesheet" href="basics.css">
@@ -23,7 +46,9 @@
 		
 				</div>
 			</header>
-			
+			<?php if (!empty($project_error)): ?>
+        <p class="error"><?php echo $project_error; ?></p>
+    <?php endif; ?>
 				<div class="container">
 					
 					
@@ -68,7 +93,7 @@
 						
 						
 				    </form>
-					
+
 				</div>
                   
 				
