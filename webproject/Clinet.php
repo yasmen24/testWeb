@@ -1,5 +1,9 @@
 <?php
-include 'DB.php'; // Ensure this path correctly points to your database connection setup
+include 'DB.php';
+
+ session_start();
+
+ $clientId=$_SESSION['id'];
 
 function fetchDesigners($category = null) {
     global $conn; // Use the connection from the global scope
@@ -70,7 +74,6 @@ function fetchConsultationRequests($clientId) {
 }
 
 // Assume you've got a way to get the current client's ID, for demonstration let's use:
-$clientId = 2; // This would realistically come from session data or another source  ///replace with session
 $consultationRequests = fetchConsultationRequests($clientId);
 
 
@@ -140,18 +143,18 @@ $consultationRequests = fetchConsultationRequests($clientId);
             <table class="table1">
                
                 <!--row 1 (table header)-->
-                                    <thead class="table1">
+                <thead class="table1">
 
                 <tr>
                     <th  >Designer</th>
                     <th >Specialty</th>
                 </tr>
-                           </thead>
+                </thead>
 
                <!--row 2(data)-->
                <tr>
                  <?php foreach ($designers as $designer): ?>
-        <tr>
+             <tr>
             <td>
                 <a href="OneDesigner.php?designerId=<?php echo $designer['id']; ?>">
                     <img src="image/<?php echo $designer['logoImgFileName']; ?>" alt="Logo">
@@ -159,7 +162,7 @@ $consultationRequests = fetchConsultationRequests($clientId);
                 </a>
             </td>
             <td><?php echo $designer['specialties']; ?></td>
-            <td><a href="RequestDesignConsultation.php?designerId=<?php echo $designer['id']; ?>&clientId=<?php echo $client['id']; ?>">Request Design Consultation</a></td>
+            <td><a href="RequestDesignConsultation.php?designerId=<?php echo $designer['id']; ?>">Request Design Consultation</a></td>
         </tr>
         <?php endforeach; ?>
               </tr>

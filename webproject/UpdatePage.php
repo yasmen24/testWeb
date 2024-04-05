@@ -128,8 +128,7 @@
 include 'fileUpload.php';
 
     
-    
-    function getCategoryOrId($input, $conn) {
+     function getCategoryOrId($input, $conn) {
     // Check if the input is numeric or a string
     if (is_numeric($input)) {
         // Input is numeric, so retrieve the corresponding category
@@ -151,6 +150,8 @@ include 'fileUpload.php';
         return $id;
     }
 }
+
+  
 
 
 ?>

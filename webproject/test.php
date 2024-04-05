@@ -1,111 +1,117 @@
- 
-    <?php
-    session_start();
-    include 'DB.php';
-    include 'fileUpload.php';
+<?php
+// Include DB.php
+include 'DB.php';
+include 'fileUpload.php';
 
-    if(!isset($_SESSION['id'])){
-      header('Location: login.php');
-    exit();
-    }
-    $designerID = $_SESSION['id'];
+session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Retrieve all the form input from RequestDesignConsultation.php
+    $clientID = $_SESSION['id'];
+   
+    $designerID = $_POST['designerID'];
+    $roomType = $_POST['roomType']; 
+    $designCategoryID =getCategoryOrId( $_POST['designCategory'], $conn); 
+    $width = $_POST['width'];
+    $length = $_POST['length'];
+    $colorPreferences = $_POST['colorPreferences'];
+    // Retrieve roomTypeID based on room type
+$roomTypeID= getroomTypeOrId($_POST['roomType'],$conn);
 
-    
-    
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Get form data
-        $projectname = $_POST["projectname"];
-        $category = $_POST["category"];
-        $description = $_POST["Descriptiontext"];
+$statusID=1;
+ ////here will insert the string as numric
+$sql = "INSERT INTO designconsultationrequest 
+            (clientID, designerID, roomTypeID, designCategoryID, roomWidth, roomLength, date, statusID, colorPreferences) 
+        VALUES (?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
 
-        // Handle file upload
-        $target_dir = "uploads/"; // Directory where images will be stored
-        
-         echo  $target =  uniqid() . "_" . basename($_FILES["file"]["name"]);
-      echo  $target_file = $target_dir ;
-        $image=strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-        $uploadOk = 1;
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("Error preparing statement: " . $conn->error);
+}
+// Use a default or placeholder value for colorPreferences
+if (!$stmt->bind_param("iiiiiddi", $clientID, $designerID, $roomTypeID, $designCategoryID, $width, $length, $statusID,$colorPreferences )) {
+    die("Error binding parameters: " . $stmt->error);
+}
 
-        // Check if image file is a actual image or fake image
-        $check = getimagesize($_FILES["file"]["tmp_name"]);
-        if($check !== false) {
-            $uploadOk = 1;
-        } else {
-            echo "File is not an image.";
-            $uploadOk = 0;
-        }
+if ($stmt->execute()) {
+    echo "Success! The record has been added.";
+} else {
+    echo "Error executing statement: " . $stmt->error;
+}
 
-        // Check file size
-        if ($_FILES["file"]["size"] > 5000000) {
-            echo "Sorry, your file is too large.";
-            $uploadOk = 0;
-        }
+//update string to it actual value
+$sqlUpdate = "UPDATE designconsultationrequest SET colorPreferences=? WHERE id=?";
+$stmtUpdate = $conn->prepare($sqlUpdate);
+if (!$stmtUpdate) {
+    die("Error preparing update statement: " . $conn->error);
+}
+if (!$stmtUpdate->bind_param("si", $colorPreferences, $clientID)) {
+    die("Error binding parameters for update: " . $stmtUpdate->error);
+}
+if ($stmtUpdate->execute()) {
+    header('Location: Clinet.php');
+    echo "Color preferences updated successfully.";
+} else {
+    echo "Error updating color preferences: " . $stmtUpdate->error;
+}
+$stmt->close();
 
-        // Allow certain file formats
-        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-        && $imageFileType != "gif" ) {
-            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-            $uploadOk = 0;
-        }
+$stmtUpdate->close();
 
-        // Check if $uploadOk is set to 0 by an error
-        if ($uploadOk == 0) {
-            echo "Sorry, your file was not uploaded.";
-        // if everything is ok, try to upload file
-        } else {
-            if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-                // Insert data into database
+}
 
-                $sql = "INSERT INTO designportfolioproject (designerID, projectName, projectImgFileName, description, designCategoryID) VALUES (?, ?, ?, ?, ?)";
-                $stmt = $conn->prepare($sql);
-                if (!$stmt) {
-                    // Error handling if preparation fails
-                    echo "Error preparing SQL statement: " . $conn->error;
-                    exit();
-                }
 
-                // Assuming designerID and designCategoryID are known and provided
-                //$designerID = 1; // Sample designer ID
-                $stmt_category = $conn->prepare("SELECT id FROM DesignCategory WHERE category = ?");
-                $stmt_category->bind_param("s", $category);
-                $stmt_category->execute();
-                $result = $stmt_category->get_result();
-                if ($row = $result->fetch_assoc()) {
-                    $designCategoryID = $row['id'];
-                } else {
-                    // Handle if category ID is not found
-                    echo "Error: Category ID not found.";
-                    exit();
-                }
 
-                $stmt->bind_param("isssi", $designerID, $projectname, $target_file, $description, $designCategoryID);
-                if (!$stmt) {
-                    // Error handling if binding parameters fails
-                    echo "Error binding parameters: " . $stmt->error;
-                    exit();
-                }
 
-                // Execute the prepared statement
-                if ($stmt->execute()) {
-                    // Success
-                    echo "The file " . htmlspecialchars(basename($_FILES["file"]["name"])) . " has been uploaded.";
-                    // Redirect to designer's homepage
-                    header("Location: DesignerHomepage.php");
-                    exit();
-                } else {
-                    // Error handling if execution fails
-                    echo "Error executing prepared statement: " . $stmt->error;
-                    exit();
-                }
 
-                // Close the prepared statement
-                $stmt->close();
+//Redirect or further processing
+// Remember to use output buffering or ensure no output before this if redirection is intended
+// header('Location: Client.php');
 
-            } else {
-                echo "Sorry, there was an error uploading your file.";
-            }
-        }
-    }
-    
-    
-    ?>
+
+
+
+//    // Checking if the insertion was successful
+//    if ($stmt->affected_rows > 0) {
+//        // Retrieve the auto-generated requestID
+//        $requestID = $stmt->insert_id;
+//        echo "New request inserted with requestID: " . $requestID;
+//    } else {
+//        echo "Error inserting request: " . $stmt->error;
+//    }
+//
+//    // Close the statement
+//    $stmt->close();
+//    // Close the connection
+//    $conn->close();
+//
+//    // Redirect to Clinet.php after completing the database operation
+////    header('Location: Clinet.php');
+//} else {
+//    echo "Error entering data into the database";
+//    // Redirect to Clinet.php after encountering an error
+////    header('Location: Clinet.php');
+//}
+
+//    $sqlRoomType = "SELECT id FROM roomtype WHERE type = ?";
+//    $stmtRoomType = $conn->prepare($sqlRoomType);
+//    $stmtRoomType->bind_param("s", $roomType);
+//    $stmtRoomType->execute();
+//    $resultRoomType = $stmtRoomType->get_result();
+//    $rowRoomType = $resultRoomType->fetch_assoc();
+//    $roomTypeID = $rowRoomType['id'];
+//    $stmtRoomType->close();
+
+//    // Retrieve designCategoryID based on design category
+//    $sqlDesignCategory = "SELECT id FROM DesignCategory WHERE category = ?";
+//    $stmtDesignCategory = $conn->prepare($sqlDesignCategory);
+//    $stmtDesignCategory->bind_param("s", $designCategory);
+//    $stmtDesignCategory->execute();
+//    $resultDesignCategory = $stmtDesignCategory->get_result();
+//    $rowDesignCategory = $resultDesignCategory->fetch_assoc();
+//    $designCategoryID = $rowDesignCategory['id'];
+//    $stmtDesignCategory->close();
+
+    // Inserting the data retrieved from the form in RequestDesignConsultation.php
+//  
+//   
+// Assuming all the variables ($clientID, $designerID, $roomTypeID, $designCategoryID, $width, $length, $colorPreferences, $statusID) are defined earlier in your script
