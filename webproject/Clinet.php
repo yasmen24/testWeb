@@ -1,9 +1,9 @@
 <?php
-include 'DB.php';
-
+include_once'DB.php';
+include_once 'fileUpload.php';
  session_start();
 
- $clientId=$_SESSION['id'];
+$clientId=$_SESSION['id'];
 
 function fetchDesigners($category = null) {
     global $conn; // Use the connection from the global scope
@@ -70,12 +70,16 @@ function fetchConsultationRequests($clientId) {
     $result = $stmt->get_result();
     $requests = $result->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
+
     return $requests;
 }
 
-// Assume you've got a way to get the current client's ID, for demonstration let's use:
 $consultationRequests = fetchConsultationRequests($clientId);
 
+//clinet info 
+$sql = "SELECT * FROM client WHERE `id`=".$clientId; 
+               $result = mysqli_query($conn, $sql);
+                $row = mysqli_fetch_assoc($result);
 
 ?>
 
@@ -108,15 +112,14 @@ $consultationRequests = fetchConsultationRequests($clientId);
          <!--welcome messsage &user info-->
         <section id="userInfoSection">
                 <div id="welcome">
-                        <h3 class="name"> Welcome :Huda</h3>
+                        <h3 class="name"> Welcome :<?php echo $row['firstName']?></h3>
                        <a href="signout.php" >Sign out</a>
                 </div>
 
                 <div id="userInfoBox">
                       <ul >
-                        <li>First Name:<span> Huda</span></li>
-                        <li> Last Name<span> Abduallah</span></li>
-                        <li>Email Address:<span> huda@gmail.com</span></li>
+                        <li>Client Name:<span> <?php echo getClientNameById($row['id'], $conn)?></span></li>
+                        <li>Email Address:<span> <?php echo $row['emailAddress']?></span></li>
                     </ul>
                 </div>
         </section>
@@ -135,7 +138,7 @@ $consultationRequests = fetchConsultationRequests($clientId);
                             <option value="Coastal">Coastal</option>
                             <option value="Bohemian">Bohemian</option>
                         </select>
-                        <button id="Filter" >Filter</button>
+                        <button type="submit" id="Filter" name='Filter' >Filter</button>
                 </div>
                 </form>
             </div>
@@ -156,9 +159,8 @@ $consultationRequests = fetchConsultationRequests($clientId);
              <tr>
             <td>
                 <a href="OneDesigner.php?designerId=<?php echo $designer['id'];?>">
-                    <img src="image/<?php echo $designer['logoImgFileName']; ?>" alt="Logo">
-                    <?php echo $designer['brandName']; 
-                    ?>
+                    <img src="<?php echo "uploads/".$designer['logoImgFileName']; ?>" alt="Logo">
+                    <?php echo "<br>".$designer['brandName'];  ?>
                 </a>
             </td>
             <td><?php echo $designer['specialties']; ?></td>
@@ -189,7 +191,8 @@ $consultationRequests = fetchConsultationRequests($clientId);
     <?php foreach ($consultationRequests as $request): ?>
     <tr>
         <td>
-            <img src="image/<?php echo htmlspecialchars($request['logoImgFileName']); ?>" alt="Logo">
+            <img src="<?php echo "uploads/". $request['logoImgFileName']; ?>" alt="[Logo]">
+            <br>
             <?php echo htmlspecialchars($request['brandName']); ?>
         </td>
         <td><?php echo htmlspecialchars($request['roomType']); ?></td>
@@ -199,16 +202,19 @@ $consultationRequests = fetchConsultationRequests($clientId);
         <td><?php echo htmlspecialchars($request['date']); ?></td>
         <td><?php echo htmlspecialchars($request['status']); ?></td>
         <td>
+            
             <!-- Check if the status is "Approved" before displaying consultation -->
-            <?php if ($request['status'] === 'Approved' && !empty($request['consultation'])): ?>
-                <div><?php echo htmlspecialchars($request['consultation']); ?></div>
+                        <?php 
+                if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
                 <!-- Show image only if there's a consultationImgFileName -->
                 <?php if (!empty($request['consultationImgFileName'])): ?>
-                    <img src="image/<?php echo htmlspecialchars($request['consultationImgFileName']); ?>" alt="Consultation Image" style="max-width: 100px; height: auto;">
+                    <img src="<?php echo "uploads/".$request['consultationImgFileName']; ?>" alt="[image:Consultation Image]">
                 <?php endif; ?>
+                <div><?php echo htmlspecialchars($request['consultation']); ?></div>
             <?php else: ?>
                 No consultation provided or not approved yet.
             <?php endif; ?>
+
         </td>
     </tr>
     <?php endforeach; ?>

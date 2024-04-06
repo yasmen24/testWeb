@@ -153,8 +153,10 @@ min-width: 20vw;  }
 /* to customize the size of image inside the table */
 
  img{
-        max-width: 35%;
+        width: 45%;
+        height: 45%;
         overflow:auto;
+        margin:1%
 
     }
 
