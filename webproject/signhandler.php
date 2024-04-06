@@ -99,9 +99,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt ="INSERT INTO client (firstName, lastName, emailAddress, password) VALUES ('$firstName','$lastName','$email','$password')";
         
         if (mysqli_query($conn, $stmt)){
+            
+            
             // Store user type and ID in session variables
             $_SESSION['userType'] = 'client';
-            $_SESSION['id'] = $stmt->insert_id;
+            $_SESSION['id'] = $conn->insert_id;
             
             // Redirect to client homepage
             redirectToHomepage('client');
