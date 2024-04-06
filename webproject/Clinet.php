@@ -1,8 +1,9 @@
 <?php
 include_once'DB.php';
 include_once 'fileUpload.php';
- session_start();
 
+ session_start();
+include 'session_check.php';
 $clientId=$_SESSION['id'];
 
 function fetchDesigners($category = null) {

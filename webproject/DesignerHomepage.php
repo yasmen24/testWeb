@@ -1,6 +1,6 @@
 <?php
         session_start();
-
+include 'session_check.php';
         // Error reporting
             error_reporting(E_ALL);
             ini_set('log_errors', '1');
