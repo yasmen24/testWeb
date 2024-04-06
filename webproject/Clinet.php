@@ -172,60 +172,59 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
             
           
             </table>
-     <?php if (empty($consultationRequests)): ?>
-    <Strong style="border: black solid 2px;padding:10px;color:darkred;text-align: center">No previous design consultation requests found.</Strong>
+     
+  <?php if (empty($consultationRequests)): ?>
+    <section id="ConsultaionPart">
+        <h2>Previous Design Consultation Requests</h2>
+        <strong style='font-size: 40px; color:#801e00; padding: 20px;'>No previous design consultation requests found.</strong>
+    </section>
 <?php else: ?>
     <?php foreach ($consultationRequests as $request): ?>
-          <section id="ConsultaionPart">
-   <h2>Previous Design Consultation Requests</h2>
-    <table class="Table2">
-        <thead>
-            <tr>
-               <th>Designer</th>
-                <th>Room</th>
-                <th>Dimensions</th>
-               <th>Design Category</th>
-                <th>Color Preferences</th>
-                <th>Request Date</th>
-              <th>Request Status</th>
-              <th>Consultation</th>
-            </tr>
-      </thead>
-       <tbody>
-        
-    <tr>
-        <td>
-            <img src="<?php echo "uploads/". $request['logoImgFileName']; ?>" alt="[Logo]">
-            <br>
-            <?php echo htmlspecialchars($request['brandName']); ?>
-        </td>
-        <td><?php echo htmlspecialchars($request['roomType']); ?></td>
-        <td><?php echo htmlspecialchars($request['dimensions']); ?></td>
-        <td><?php echo htmlspecialchars($request['category']); ?></td>
-        <td><?php echo htmlspecialchars($request['colorPreferences']); ?></td>
-        <td><?php echo htmlspecialchars($request['date']); ?></td>
-        <td><?php echo htmlspecialchars($request['status']); ?></td>
-        <td>
-            
-            <!-- Check if the status is "Approved" before displaying consultation -->
-                        <?php 
-                if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
-                <!-- Show image only if there's a consultationImgFileName -->
-                <?php if (!empty($request['consultationImgFileName'])): ?>
-                    <img src="<?php echo "uploads/".$request['consultationImgFileName']; ?>" alt="[image:Consultation Image]">
-                <?php endif; ?>
-                <div><?php echo htmlspecialchars($request['consultation']); ?></div>
-            <?php else: ?>
-                No consultation provided or not approved yet.
-            <?php endif; ?>
-
-        </td>
-    </tr>
+        <section id="ConsultaionPart">
+            <h2>Previous Design Consultation Requests</h2>
+            <table class="Table2">
+                <thead>
+                    <tr>
+                        <th>Designer</th>
+                        <th>Room</th>
+                        <th>Dimensions</th>
+                        <th>Design Category</th>
+                        <th>Color Preferences</th>
+                        <th>Request Date</th>
+                        <th>Request Status</th>
+                        <th>Consultation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <img src="<?php echo "uploads/" . $request['logoImgFileName']; ?>" alt="[Logo]">
+                            <br>
+                            <?php echo htmlspecialchars($request['brandName']); ?>
+                        </td>
+                        <td><?php echo htmlspecialchars($request['roomType']); ?></td>
+                        <td><?php echo htmlspecialchars($request['dimensions']); ?></td>
+                        <td><?php echo htmlspecialchars($request['category']); ?></td>
+                        <td><?php echo htmlspecialchars($request['colorPreferences']); ?></td>
+                        <td><?php echo htmlspecialchars($request['date']); ?></td>
+                        <td><?php echo htmlspecialchars($request['status']); ?></td>
+                        <td>
+                            <?php if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
+                                <?php if (!empty($request['consultationImgFileName'])): ?>
+                                    <img src="<?php echo "uploads/" . $request['consultationImgFileName']; ?>" alt="[image:Consultation Image]">
+                                <?php endif; ?>
+                                <div><?php echo htmlspecialchars($request['consultation']); ?></div>
+                            <?php else: ?>
+                                No consultation provided or not approved yet.
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
     <?php endforeach; ?>
-</tbody>
+<?php endif; ?>
 
-    </table>
-</section>
 
         <footer id="Home-footer">
 
