@@ -2,7 +2,7 @@
     session_start();
     if(!isset($_SESSION['requestID'])){ //If the requestID is not set onto session variable, we go back to DesignerHomepage.php to set it again
         header("Location: DesignerHomepage.php");
-        exit;}
+      exit;}
 
     
 ?>
@@ -35,30 +35,24 @@
             <div class="client-info">
                 <?php
                 
-                    $requestID = $_SESSION['requestID'];
-        
-                    $connection = mysqli_connect('localhost', 'root', 'root', 'webproject');
-        
-                    $error = mysqli_connect_error();
-        
-                    if($error != null){
-                        echo "Database cannot be accessed.";}
-                    else{        
-                        $sql = "SELECT firstName, lastName FROM client WHERE id = (SELECT clientID FROM designconsultationrequest WHERE id ='$requestID')"; 
-                        $sql = "SELECT type FROM roomType WHERE id = (SELECT roomTypeID FROM designconsultationrequest WHERE id ='$requestID')";
-                        $sql = "SELECT category FROM designcategory WHERE id = (SELECT designCategoryID FROM designconsultationrequest WHERE id ='$requestID')";
-                        $result = mysqli_query($connection, $sql);
-            
-                        while($row = mysqli_fetch_assoc($result)){
-                            echo "<p id='name'><strong>Client :".$row['firstName']." ".$row['lastName']."</strong></p>";
-                            echo "<p id='roomT'><strong>Room Type: ".$row['type']."</strong></p>";
-                            echo "<p id='room'><strong>Room Dimensions:".$row['roomLength']."x".$row['roomWidth']."m</strong></p>";
-                            echo "<p id='designC'><strong>Design Category :".$row['designCategoryID']."</strong></p>";
-                            echo "<p id='colorP'><strong>Color Preferences: " .$row['colorPreferences']."</strong></p>";
-                            echo "<p id='Date'><strong>Date :".$row['date']."</strong></p>";
-                        }    
-                    }
-                ?>   
+                include_once 'DB.php';
+                
+                include_once 'fileUpload.php';
+                                $sql = "SELECT * FROM `designconsultationrequest` WHERE `designerID`=".$_SESSION['requestID']; 
+                                $result = mysqli_query($conn, $sql);
+                                         $row = mysqli_fetch_assoc($result);
+                                         
+                                          echo "<p id='name'><strong>Client :".getClientNameById($row['clientID'],$conn)."</strong></p>";
+                                          
+                                           echo "<p id='roomT'><strong>Room Type: ".getroomTypeOrId($row['roomTypeID'],$conn)."</strong></p>";
+                                             echo "<p id='room'><strong>Room Dimensions:".$row['roomWidth']."x".$row['roomLength']."m</strong></p>";
+                                        echo "<p id='designC'><strong>Design Category :".getCategoryOrId($row['designCategoryID'],$conn)."</strong></p>";
+                                         echo "<p id='colorP'><strong>Color Preferences: " .$row['colorPreferences']."</strong></p>";
+                                                       echo "<p id='Date'><strong>Date :".$row['date']."</strong></p>";
+
+  
+   
+                                    ?>   
             </div>
 
             <hr>
@@ -68,7 +62,10 @@
                 <h2>Consultation</h2>
                 <?php echo "<input type='hidden' name='requestID' value='".$_SESSION['requestID']."'>"; // hidden requestID variable ?>
                 <label for="designDescription">Design Consultation:</label>
-                <textarea id="designDescription" name="designDescription" rows="4" placeholder="Enter your design consultation here..." required></textarea>
+                <textarea id="designDescription" name="designDescription" rows="4" placeholder="Enter your design consultation here..." required >
+                       <?php   echo getConsultationByRequestID($row['id'], $conn);  ?>
+
+                </textarea>
                 <label for="designImage">Design Image:</label>
                 <input type="file" id="designImage" name="designImage" accept="image/*" required>
                 <input id="send" type="submit" class="sbt" value="Send">
