@@ -1,9 +1,8 @@
 <?php
 include_once'DB.php';
 include_once 'fileUpload.php';
-
  session_start();
-include 'session_check.php';
+
 $clientId=$_SESSION['id'];
 
 function fetchDesigners($category = null) {
@@ -173,23 +172,27 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
             
           
             </table>
-        <section id="ConsultaionPart">
-    <h2>Previous Design Consultation Requests</h2>
+     <?php if (empty($consultationRequests)): ?>
+    <Strong style="border: black solid 2px;padding:10px;color:darkred;text-align: center">No previous design consultation requests found.</Strong>
+<?php else: ?>
+    <?php foreach ($consultationRequests as $request): ?>
+          <section id="ConsultaionPart">
+   <h2>Previous Design Consultation Requests</h2>
     <table class="Table2">
         <thead>
             <tr>
-                <th>Designer</th>
+               <th>Designer</th>
                 <th>Room</th>
                 <th>Dimensions</th>
-                <th>Design Category</th>
+               <th>Design Category</th>
                 <th>Color Preferences</th>
                 <th>Request Date</th>
-                <th>Request Status</th>
-                <th>Consultation</th>
+              <th>Request Status</th>
+              <th>Consultation</th>
             </tr>
-        </thead>
-        <tbody>
-    <?php foreach ($consultationRequests as $request): ?>
+      </thead>
+       <tbody>
+        
     <tr>
         <td>
             <img src="<?php echo "uploads/". $request['logoImgFileName']; ?>" alt="[Logo]">
