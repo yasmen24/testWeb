@@ -84,7 +84,7 @@ if (isset($_SESSION['project_error'])) {
 						
 						<div class="textholder">
 						  <label for="Descriptiontext">Description:</label><br>
-						  <textarea placeholder="Description of the design..." cols="30" rows="5" name="Descriptiontext"></textarea>
+                                                  <textarea placeholder="Description of the design..." cols="30" rows="5" name="Descriptiontext" required></textarea>
 						</div>
 						
 						

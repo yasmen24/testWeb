@@ -219,7 +219,7 @@ if(mysqli_connect_error()){
                                           <?php
                                  include_once 'DB.php';
                                  include_once 'fileUpload.php';
-                                $sql = "SELECT * FROM `designconsultationrequest` WHERE `designerID`=3"; //edit 
+                                $sql = "SELECT * FROM `designconsultationrequest` WHERE `designerID`=".$designerID; //edit 
                                 $result = mysqli_query($conn, $sql);
                                 
                                 

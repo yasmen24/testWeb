@@ -26,18 +26,18 @@
 
             mysqli_query($conn, $insertConsultationQuery);
             
-            // Redirect to designer's homepage
-//            header("Location: DesignerHomepage.php");
-//            exit;
+            //Redirect to designer's homepage
+           header("Location: DesignerHomepage.php");
+            exit;
         } else {
             // If requestID is not set in session, redirect back to the consultation page
-//            header("Location: consultation_page.php");
-//            exit;
+            header("Location: consultation_page.php");
+            exit;
         }
     } else {
         // If the form is not submitted, redirect back to the consultation page
-//        header("Location: consultation_page.php");
-//        exit;
+        header("Location: consultation_page.php");
+       exit;
     }
 ?>
 

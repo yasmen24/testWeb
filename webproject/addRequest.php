@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    
     $designerID = $_POST['designerID'];
   $roomType = $_POST['roomType']; 
-
+  if(empty($roomType)){$_POST['roomType']="Living Room"; }
+if(empty($_POST['designCategory'])){$_POST['designCategory']="Modern"; }
     $designCategoryID =getCategoryOrId( $_POST['designCategory'], $conn); 
     $width = $_POST['width'];
     $length = $_POST['length'];

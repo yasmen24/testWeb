@@ -179,7 +179,7 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
         <strong style='font-size: 40px; color:#801e00; padding: 20px;'>No previous design consultation requests found.</strong>
     </section>
 <?php else: ?>
-    <?php foreach ($consultationRequests as $request): ?>
+   
         <section id="ConsultaionPart">
             <h2>Previous Design Consultation Requests</h2>
             <table class="Table2">
@@ -196,6 +196,7 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
                     </tr>
                 </thead>
                 <tbody>
+                     <?php foreach ($consultationRequests as $request): ?>
                     <tr>
                         <td>
                             <img src="<?php echo "uploads/" . $request['logoImgFileName']; ?>" alt="[Logo]">
@@ -219,10 +220,11 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
                             <?php endif; ?>
                         </td>
                     </tr>
+                     <?php endforeach; ?>
                 </tbody>
             </table>
         </section>
-    <?php endforeach; ?>
+   
 <?php endif; ?>
 
 
