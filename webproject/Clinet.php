@@ -150,15 +150,15 @@ $consultationRequests = fetchConsultationRequests($clientId);
                     <th >Specialty</th>
                 </tr>
                 </thead>
-
                <!--row 2(data)-->
                <tr>
                  <?php foreach ($designers as $designer): ?>
              <tr>
             <td>
-                <a href="OneDesigner.php?designerId=<?php echo $designer['id']; ?>">
+                <a href="OneDesigner.php?designerId=<?php echo $designer['id'];?>">
                     <img src="image/<?php echo $designer['logoImgFileName']; ?>" alt="Logo">
-                    <?php echo $designer['brandName']; ?>
+                    <?php echo $designer['brandName']; 
+                    ?>
                 </a>
             </td>
             <td><?php echo $designer['specialties']; ?></td>
