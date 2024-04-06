@@ -50,6 +50,33 @@ if(mysqli_connect_error()){
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title> Designer Homepage </title>
+                        <style>
+                            /* Style for designer information */
+                            ul.designer-info {
+                                list-style-type: none;
+                                padding: 0;
+                            }
+
+                            ul.designer-info li {
+                                margin-bottom: 10px;
+                            }
+
+                            ul.designer-info li span {
+                                font-weight: bold;
+                            }
+
+                            .logo-container {
+                                display: flex; /* Use flexbox */
+                                align-items: center; /* Center the content vertically */
+                            }
+
+                            .logo-container img {
+                                max-width: 100px; /* Limit the maximum width of the logo */
+                                max-height: 100px; /* Limit the maximum height of the logo */
+                                margin-left: 10px; /* Add some spacing between the logo and the other information */
+                                border-radius: 20%; /* Make the image rounded */
+                            }
+                        </style>
 			<link rel="stylesheet" href="Designer.css">
 			<link rel="stylesheet" href="basics.css">
 			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -71,7 +98,7 @@ if(mysqli_connect_error()){
 
 			<section id="userInfo">
 				<div id="tableHeadr-1"> <!-- Update the comment to reflect the correct ID -->
-                                    <h3 id="welcomeText">welcome <?php echo $firstName;?> !</h3>                                   
+                                    <h3 id="welcomeText">Welcome <?php echo $firstName;?> !</h3>                                   
                                     <a href="index.php" id="logout"> 
                                         <strong> Log-out</strong>
                                     </a>
@@ -81,22 +108,11 @@ if(mysqli_connect_error()){
 
 				<div id="designerInfo">
                                     
-                                    <ul>
-                                        <li>First Name: <span><?php echo $firstName;?></span></li>
-                                        <li>Last Name: <span><?php echo $lastName;?></span></li>
+                                    <ul class="designer-info">
+                                        <li>Designer Name: <span><?php echo $firstName . " " . $lastName;?></span></li>
                                         <li>Email Address: <span><?php echo $emailAddress;?></span></li>
-                                       <!-- <li>Phone: <span>{$designer['phone']}</span></li> -->
                                         <li>Brand Name: <span><?php echo $brandName;?></span></li>
-                                        <li>Logo: <span><?php
-                                                        $sqlForImg= "SELECT logoImgFileName FROM designer WHERE id=$designerID";
-                                                        if($resultForImg = mysqli_query($connection, $sqlForImg)){
-                                                            while ($rowFORImg = mysqli_fetch_assoc($resultForImg)) {
-                                                                echo "<img src='uploads/" . $rowFORImg['logoImgFileName'].'" alt="designer\'s logo" width="100" height="100" style="border: solid" >';
-                                                           }
-                                                        }
-                                                    ?></span></li>
-                                        
-                                        <li>Specialties: <span>
+                                        <li><span>
                                             <?php    
                                             $sqlspec = "SELECT dc.category
                                                  FROM designerspeciality ds
@@ -115,8 +131,21 @@ if(mysqli_connect_error()){
                                          } else {
                                              echo "No specialties found for this designer.";
                                          }
-                                         ?> </span></li>
+                                         ?></span></li>
+                                        <li class="logo-container"> <!-- Add a class to the logo container -->
+                                            Logo: <span><?php
+                                                        $sqlForImg= "SELECT logoImgFileName FROM designer WHERE id=$designerID";
+                                                        if($resultForImg = mysqli_query($connection, $sqlForImg)){
+                                                            while ($rowFORImg = mysqli_fetch_assoc($resultForImg)) {
+                                                                echo "<img src='uploads/" . $rowFORImg['logoImgFileName'] . "' alt='designer\'s logo'>";
+                                                           }
+                                                        }
+                                                    ?>
+                                            </span>
+                                        </li>
                                     </ul>
+
+
                                     
 				</div>
 			
