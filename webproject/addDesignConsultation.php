@@ -11,9 +11,13 @@
         if(isset($_SESSION['requestID'])) {
             // Get requestID from session
             $requestID = $_SESSION['requestID'];
-            
             // Get form data
             $designDescription = $_POST['designDescription'];
+            
+            
+//            $designImage=$_POST['designImage'];
+            $image=uploadImage('designImage');
+            echo $image;
             // You may want to handle file upload here and get the file path
             
             // Update request status in the database
@@ -22,22 +26,22 @@
             echo $requestID;
             // Insert new design consultation into the database
             // Assuming you have a table named 'designconsultation' with appropriate fields
-            $insertConsultationQuery = "UPDATE designconsultation SET consultation = '$designDescription' WHERE requestID = '$requestID'";
+                 $insertConsultationQuery = "INSERT INTO designconsultation (requestID, consultation,consultationImgFileName) VALUES ('$requestID', '$designDescription','$image')";
 
             mysqli_query($conn, $insertConsultationQuery);
             
             //Redirect to designer's homepage
-           header("Location: DesignerHomepage.php");
-            exit;
+         header("Location: DesignerHomepage.php");
+          exit;
         } else {
             // If requestID is not set in session, redirect back to the consultation page
-            header("Location: consultation_page.php");
-            exit;
+//            header("Location: consultation_page.php");
+//            exit;
         }
     } else {
         // If the form is not submitted, redirect back to the consultation page
-        header("Location: consultation_page.php");
-       exit;
+//        header("Location: consultation_page.php");
+//       exit;
     }
 ?>
 

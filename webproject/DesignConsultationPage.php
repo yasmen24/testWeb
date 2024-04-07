@@ -38,10 +38,10 @@
                 include_once 'DB.php';
                 
                 include_once 'fileUpload.php';
-                                $sql = "SELECT * FROM `designconsultationrequest` WHERE `designerID`=".$_SESSION['requestID']; 
+                
+                                $sql = "SELECT * FROM `designconsultationrequest` WHERE `id`=".$_SESSION['requestID']; 
                                 $result = mysqli_query($conn, $sql);
                                          $row = mysqli_fetch_assoc($result);
-                                         
                                           echo "<p id='name'><strong>Client :".getClientNameById($row['clientID'],$conn)."</strong></p>";
                                           
                                            echo "<p id='roomT'><strong>Room Type: ".getroomTypeOrId($row['roomTypeID'],$conn)."</strong></p>";
@@ -58,16 +58,20 @@
             <hr>
 
             <!-- Designer's Consultation Form -->
-            <form id="designerConsultationForm" action="addDesignConsultation.php" method="post">
+            <form id="designerConsultationForm" action="addDesignConsultation.php" method="post" enctype="multipart/form-data">
+                
+                
                 <h2>Consultation</h2>
-                <?php echo "<input type='hidden' name='requestID' value='".$_SESSION['requestID']."'>"; // hidden requestID variable ?>
+                <?php  echo "<input type='hidden' name='requestID' value='".$_SESSION['requestID']."'>"; // hidden requestID variable ?>
                 <label for="designDescription">Design Consultation:</label>
                 <textarea id="designDescription" name="designDescription" rows="4" placeholder="Enter your design consultation here..." required >
-                       <?php   echo getConsultationByRequestID($row['id'], $conn);  ?>
+                       <?php   // getConsultationByRequestID($row['id'], $conn);  ?>
 
                 </textarea>
                 <label for="designImage">Design Image:</label>
-                <input type="file" id="designImage" name="designImage" accept="image/*" required>
+                
+                <input type="file" id="designImage" name="designImage"  required>
+                
                 <input id="send" type="submit" class="sbt" value="Send">
             </form>
         </div>

@@ -179,9 +179,9 @@ if(mysqli_connect_error()){
                                                         if (!$result) {
                                                             die('Error in executing SQL query: ' . mysqli_error($connection));
                                                         }
-                                                        if (mysqli_num_rows($result) == 0) {
-                                                            echo "No rows returned from the query."; // Check if any rows are returned
-                                                        } else {
+                                                        if (mysqli_num_rows($result) > 0) {
+//                                                            echo "No rows returned from the query."; // Check if any rows are returned
+                                                        
                                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                               echo "<tr>";
                                                         echo "<td>" . $row['projectName'] . "</td>";
@@ -205,7 +205,10 @@ if(mysqli_connect_error()){
                                                         echo "</tr>";
 
                                                             }
-                                                        }
+                                                        }else{
+                                                       echo "<tr><td colspan='8' style='text-align: center;'><strong style='font-size: 40px; color:#801e00; padding: 20px;'> No project has been added yet.</strong></td></tr>";}
+
+                                                        
                                                     ?>   
   
                                             </tbody>
@@ -262,49 +265,9 @@ if(mysqli_connect_error()){
                                                      
                                 ?>
                                 <?php
-//                                      $sql3 = 'SELECT dcr.*, c.firstName AS clientFirstName, c.lastName AS clientLastName, rt.type AS roomType, dc.category AS designCategory 
-//                                                FROM designconsultationrequest AS dcr
-//                                                INNER JOIN RequestStatus AS rs ON dcr.statusID = rs.id
-//                                                INNER JOIN Client AS c ON dcr.clientID = c.id
-//                                                INNER JOIN RoomType AS rt ON dcr.roomTypeID = rt.id
-//                                                INNER JOIN DesignCategory AS dc ON dcr.designCategoryID = dc.id
-//                                                WHERE dcr.designerID = '.$designerID.' AND rs.status = "pending consultation"';
-//
-//                                       $results3 = mysqli_query($connection, $sql3);
-//
-//                                       while ($row = mysqli_fetch_assoc($results3)) {
-//                                           echo "<tr>";
-//                                       echo "<td>".$row['clientFirstName']." ".$row['clientLastName']."</td>"; // Client name
-//                                           echo "<td>".$row['roomType']."</td>"; // Room type
-//                                           echo "<td>".$row['roomWidth']."x".$row['roomLength']."m</td>"; // Room dimensions
-//                                           echo "<td>".$row['designCategory']."</td>"; // Design category
-//                                           echo "<td>".$row['colorPreferences']."</td>"; // Color preferences
-//                                           echo "<td>".$row['date']."</td>"; // Date
-//                                           echo "<td><a href='DesignConsultationPage.php?requestID=" . $row['id'] . "'><strong>Provide Consultation</strong></a></td>";
-//                                           echo "<td><a href='DeclineConsultationPage.php?requestID=" . $row['id'] . "'><strong>Decline Consultation</strong></a></td>";
-//                                           echo "</tr>";
-//                                                //echo '<th><a class="provide-decline" href="designconsultation.php?requestID=.$row['id'] ."><strong style="background-color: #F6F6F6">Provide Consultation</strong></a></th>';
-//                                                //$prov = 'UPDATE designconsultationrequest SET statusID=3 WHERE id='.$row['id'].'';
-//                                                //echo '<th><a class="provide-decline" href="declineConsultation.php?requestID='.$id.'"><strong style="background-color: #F6F6F6">Decline Consultation</strong>/a></th>';
-//     
-//
-//                                        }                     
-//                                ?>
+                                                 ?>
                                 </tbody>    
-<!--                                <tr>
-                                    <td>Sara AlQabbani</td>
-                                    <td>Bedroom</td>
-                                    <td>3*4m</td>
-                                    <td>Coastal</td>
-                                    <td>Blue and White</td>
-                                    <td>15/1/2024</td>
-                                    <td>
-                                        <a href="DesignConsultationPage.php"><strong>Provide Consultation</strong></a>
-                                    </td>
-                                    <td>
-                                        <a href=""><strong>Decline Consultation</strong></a>
-                                    </td>
-                                </tr>-->
+
                                 </table>
                             </section>
                         </section>	

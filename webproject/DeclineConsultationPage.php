@@ -17,7 +17,7 @@
         $requestID = $_GET['requestID'];
 
         // Construct SQL query to update the status to "consultation declined"
-        $sql = "UPDATE DesignConsultationRequest SET statusID = 2 WHERE id = ?";
+        $sql = "UPDATE DesignConsultationRequest SET statusID = 3 WHERE id = ?";
 
         // Prepare the SQL statement
         $stmt = mysqli_prepare($connection, $sql);

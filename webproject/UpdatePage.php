@@ -94,7 +94,7 @@
             </div>
                 <!--submit button-->
 
-           <input type="submit" id="btn" name="btn" value="Submit" />
+                <input type="submit" id="btn" name="btn" value="Submit" style="width:25%; align-self: center;margin:5px; height:25px" />
 
        
         </form>

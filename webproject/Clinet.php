@@ -94,10 +94,13 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
         <link rel="stylesheet" href="basics.css">
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="Clinet.js"></script>
+        
+        
     </head>
 
     <body>
-        <header id="Home-header">
+        
+        <header id="Home-header" class="fill">
 
             <div class="logo-title">
     
@@ -173,14 +176,9 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
           
             </table>
      
-  <?php if (empty($consultationRequests)): ?>
-    <section id="ConsultaionPart">
-        <h2>Previous Design Consultation Requests</h2>
-        <strong style='font-size: 40px; color:#801e00; padding: 20px;'>No previous design consultation requests found.</strong>
-    </section>
-<?php else: ?>
-   
-        <section id="ConsultaionPart">
+
+        
+                <section id="ConsultaionPart">
             <h2>Previous Design Consultation Requests</h2>
             <table class="Table2">
                 <thead>
@@ -195,10 +193,15 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
                         <th>Consultation</th>
                     </tr>
                 </thead>
+   
                 <tbody>
+                      <?php if (empty($consultationRequests)){
+                       echo "<tr><td colspan='8' style='text-align: center;'><strong style='font-size: 30px; color:#801e00; padding: 20px;'> No consultation request.</strong></td></tr>"
+                      ;}?>
                      <?php foreach ($consultationRequests as $request): ?>
                     <tr>
                         <td>
+
                             <img src="<?php echo "uploads/" . $request['logoImgFileName']; ?>" alt="[Logo]">
                             <br>
                             <?php echo htmlspecialchars($request['brandName']); ?>
@@ -210,14 +213,15 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
                         <td><?php echo htmlspecialchars($request['date']); ?></td>
                         <td><?php echo htmlspecialchars($request['status']); ?></td>
                         <td>
-                            <?php if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
+                                  <?php if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
                                 <?php if (!empty($request['consultationImgFileName'])): ?>
                                     <img src="<?php echo "uploads/" . $request['consultationImgFileName']; ?>" alt="[image:Consultation Image]">
                                 <?php endif; ?>
                                 <div><?php echo htmlspecialchars($request['consultation']); ?></div>
                             <?php else: ?>
-                                No consultation provided or not approved yet.
+                                <?php if ($request['status'] === 'Declined') { echo "Consultation has been Declined"; } else { echo "<p>No consultation provided or not approved yet.</p>"; } ?>
                             <?php endif; ?>
+
                         </td>
                     </tr>
                      <?php endforeach; ?>
@@ -225,7 +229,6 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
             </table>
         </section>
    
-<?php endif; ?>
 
 
         <footer id="Home-footer">
