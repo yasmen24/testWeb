@@ -185,7 +185,7 @@ if(mysqli_connect_error()){
                                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                               echo "<tr>";
                                                         echo "<td>" . $row['projectName'] . "</td>";
-                                                        echo "<td><img src='uploads/" . $row['projectImgFileName'] . "' alt='" . $row['projectName'] . "'></td>";
+                                                        echo "<td><img style='width:50%;hight:50%'src='uploads/" . $row['projectImgFileName'] . "' alt='" . $row['projectName'] . "'></td>";
 
                                                         // Query to fetch design category for the current project
                                                         $sql2 = 'SELECT category FROM DesignCategory WHERE id = ' . $row["designCategoryID"];

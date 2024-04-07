@@ -200,22 +200,22 @@ $sql = "SELECT * FROM client WHERE `id`=".$clientId;
                       ;}?>
                      <?php foreach ($consultationRequests as $request): ?>
                     <tr>
-                        <td>
+                        <td style="width: 20%">
 
-                            <img src="<?php echo "uploads/" . $request['logoImgFileName']; ?>" alt="[Logo]">
+                            <img src="<?php echo "uploads/" . $request['logoImgFileName']; ?>" alt="[Logo]" >
                             <br>
                             <?php echo htmlspecialchars($request['brandName']); ?>
                         </td>
-                        <td><?php echo htmlspecialchars($request['roomType']); ?></td>
+                        <td style="width: 10%"><?php echo htmlspecialchars($request['roomType']); ?></td>
                         <td><?php echo htmlspecialchars($request['dimensions']); ?></td>
-                        <td><?php echo htmlspecialchars($request['category']); ?></td>
+                        <td style="width: 10%"><?php echo htmlspecialchars($request['category']); ?></td>
                         <td><?php echo htmlspecialchars($request['colorPreferences']); ?></td>
-                        <td><?php echo htmlspecialchars($request['date']); ?></td>
+                        <td style="width: 10%"><?php echo htmlspecialchars($request['date']); ?></td>
                         <td><?php echo htmlspecialchars($request['status']); ?></td>
-                        <td>
+                        <td style="width: 70%">
                                   <?php if ($request['status'] === 'consultation provided' && !empty($request['consultation'])): ?>
                                 <?php if (!empty($request['consultationImgFileName'])): ?>
-                                    <img src="<?php echo "uploads/" . $request['consultationImgFileName']; ?>" alt="[image:Consultation Image]">
+                                    <img src="<?php echo "uploads/" . $request['consultationImgFileName']; ?>" alt="[image:Consultation Image]" >
                                 <?php endif; ?>
                                 <div><?php echo htmlspecialchars($request['consultation']); ?></div>
                             <?php else: ?>

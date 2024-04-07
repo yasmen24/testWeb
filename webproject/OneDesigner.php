@@ -55,7 +55,7 @@
             echo "<section id='table1'>";
                 echo "<div id='tableHeadr-2'>";
                 echo "</div>";    
-                echo "<table class='table1'>";
+                echo "<table class='table1' >";
                     $sql = "SELECT * FROM `designportfolioproject` WHERE `designerID`=".$designerID;
                     $result = mysqli_query($conn, $sql);
                     if(mysqli_num_rows($result) > 0) {
@@ -71,7 +71,7 @@
                         while ($row = mysqli_fetch_assoc($result)){
                             echo "<tr>";
                                 echo "<td style='width:fit-content;'>".$row['projectName']."</td>";
-                                echo "<td><img src='uploads/".$row['projectImgFileName']."' alt='IMAGE DESCRIPTION: Modern living room' style='width:70%;height:70%;'></td>";
+                                echo "<td style='width:20%'><img src='uploads/".$row['projectImgFileName']."' alt='IMAGE DESCRIPTION: Modern living room' style='width:50%; ' ></td>";
                                 echo "<td style='width:fit-content;'>".getCategoryOrId($row['designCategoryID'], $conn)."</td>";
                                 echo "<td class='des' style='width:fit-content;'>".$row['description']."</td>";
                             echo "</tr>";
