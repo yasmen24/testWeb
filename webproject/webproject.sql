@@ -6,25 +6,14 @@ CREATE TABLE `client` (
   `lastName` varchar(255) NOT NULL,
   `emailAddress` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
-) 
-INSERT INTO `client` (`id`, `firstName`, `lastName`, `emailAddress`, `password`) VALUES
-(47, 'afia', 'mohamed', 'afia@gmail.com', '$2y$10$V9zc15esTm6vA8o5q4G34e5vceT/nh5GNZBZc6JjoqLL7ugKbdOvC'),
-(48, 'saleh', 'hassen', 'saleh@gmail.com', '$2y$10$uJIfcdzaMjaiWO3yl/oESuULnkin0/Mv6GpZR8OW16BfkvUSIui3i'),
-(49, 'Ali', 'ali', 'Ali@gmail.com', '$2y$10$FnvzmzwSq14AT6uqATetcuClZ/6EO1MIYWsA8hBW8TU9.nbPiPbzG'),
-(50, 'Shatha', 'saleh', 'shatha@gmail.com', '$2y$10$WjYOg99YkaNYY0bfpaui8umNF19IZGCW4kzCRIik69Qh9d2ec1rFu');
+) ;
 
 
 
 CREATE TABLE `designcategory` (
   `id` int(11) NOT NULL,
   `category` varchar(255) NOT NULL
-)
-INSERT INTO `designcategory` (`id`, `category`) VALUES
-(1, 'Modern'),
-(2, 'Country'),
-(3, 'Coastal'),
-(4, 'Bohemian'),
-(5, 'Minimalist');
+);
 
 
 
@@ -33,13 +22,8 @@ CREATE TABLE `designconsultation` (
   `requestID` int(11) NOT NULL,
   `consultation` text NOT NULL,
   `consultationImgFileName` varchar(255) DEFAULT NULL
-) 
+) ;
 
-INSERT INTO `designconsultation` (`id`, `requestID`, `consultation`, `consultationImgFileName`) VALUES
-(13, 43, '  From the details you supplied, the image presents one of the potential designs that align with your specifications                \r\n                ', '6611ff42707af.jpeg'),
-(14, 49, 'In designing this space, I aimed for an effortless blend of modern elegance and comfort. The sheer curtains soften the natural light, highlighting the sleek wooden table and cozy textured chairs.', '6612ad99d704f.jpeg'),
-(15, 51, '\r\nThe design offers a serene bedroom with a modern twist, where pine green accents and a striking chandelier create a relaxing yet sophisticated atmosphere.', '6612b0a5bad76.jpeg'),
-(16, 54, '\r\nThe design offers a serene bedroom with a modern twist, where pine green accents and a striking chandelier create a relaxing yet sophisticated atmosphere.    ', '6612b1abe8361.jpeg');
 
 
 
@@ -54,7 +38,75 @@ CREATE TABLE `designconsultationrequest` (
   `colorPreferences` varchar(255) NOT NULL,
   `date` date NOT NULL,
   `statusID` int(11) NOT NULL
-) 
+);
+
+
+
+
+CREATE TABLE `designer` (
+  `id` int(11) NOT NULL,
+  `firstName` varchar(255) NOT NULL,
+  `lastName` varchar(255) NOT NULL,
+  `emailAddress` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `brandName` varchar(255) NOT NULL,
+  `logoImgFileName` varchar(255) NOT NULL
+);
+
+
+
+
+CREATE TABLE `designerspeciality` (
+  `designerID` int(11) NOT NULL,
+  `designCategoryID` int(11) NOT NULL
+); 
+
+
+
+
+CREATE TABLE `designportfolioproject` (
+  `id` int(11) NOT NULL,
+  `designerID` int(11) NOT NULL,
+  `projectName` varchar(255) NOT NULL,
+  `projectImgFileName` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `designCategoryID` int(11) NOT NULL
+); 
+
+
+CREATE TABLE `requeststatus` (
+  `id` int(11) NOT NULL,
+  `status` varchar(255) NOT NULL
+); 
+
+
+
+
+
+CREATE TABLE `roomtype` (
+  `id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL
+);
+
+INSERT INTO `client` (`id`, `firstName`, `lastName`, `emailAddress`, `password`) VALUES
+(47, 'afia', 'mohamed', 'afia@gmail.com', '$2y$10$V9zc15esTm6vA8o5q4G34e5vceT/nh5GNZBZc6JjoqLL7ugKbdOvC'),
+(48, 'saleh', 'hassen', 'saleh@gmail.com', '$2y$10$uJIfcdzaMjaiWO3yl/oESuULnkin0/Mv6GpZR8OW16BfkvUSIui3i'),
+(49, 'Ali', 'ali', 'Ali@gmail.com', '$2y$10$FnvzmzwSq14AT6uqATetcuClZ/6EO1MIYWsA8hBW8TU9.nbPiPbzG'),
+(50, 'Shatha', 'saleh', 'shatha@gmail.com', '$2y$10$WjYOg99YkaNYY0bfpaui8umNF19IZGCW4kzCRIik69Qh9d2ec1rFu');
+
+INSERT INTO `designcategory` (`id`, `category`) VALUES
+(1, 'Modern'),
+(2, 'Country'),
+(3, 'Coastal'),
+(4, 'Bohemian'),
+(5, 'Minimalist');
+
+INSERT INTO `designconsultation` (`id`, `requestID`, `consultation`, `consultationImgFileName`) VALUES
+(13, 43, '  From the details you supplied, the image presents one of the potential designs that align with your specifications                \r\n                ', '6611ff42707af.jpeg'),
+(14, 49, 'In designing this space, I aimed for an effortless blend of modern elegance and comfort. The sheer curtains soften the natural light, highlighting the sleek wooden table and cozy textured chairs.', '6612ad99d704f.jpeg'),
+(15, 51, '\r\nThe design offers a serene bedroom with a modern twist, where pine green accents and a striking chandelier create a relaxing yet sophisticated atmosphere.', '6612b0a5bad76.jpeg'),
+(16, 54, '\r\nThe design offers a serene bedroom with a modern twist, where pine green accents and a striking chandelier create a relaxing yet sophisticated atmosphere.    ', '6612b1abe8361.jpeg');
+
 
 INSERT INTO `designconsultationrequest` (`id`, `clientID`, `designerID`, `roomTypeID`, `designCategoryID`, `roomWidth`, `roomLength`, `colorPreferences`, `date`, `statusID`) VALUES
 (43, 50, 35, 3, 1, '22.00', '30.00', 'white', '2024-04-07', 5),
@@ -72,29 +124,12 @@ INSERT INTO `designconsultationrequest` (`id`, `clientID`, `designerID`, `roomTy
 (56, 50, 33, 1, 1, '2.00', '2.00', 'white', '2024-04-07', 1),
 (57, 50, 36, 3, 1, '4.00', '4.00', 'brown', '2024-04-07', 1);
 
-
-CREATE TABLE `designer` (
-  `id` int(11) NOT NULL,
-  `firstName` varchar(255) NOT NULL,
-  `lastName` varchar(255) NOT NULL,
-  `emailAddress` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `brandName` varchar(255) NOT NULL,
-  `logoImgFileName` varchar(255) NOT NULL
-)
-
 INSERT INTO `designer` (`id`, `firstName`, `lastName`, `emailAddress`, `password`, `brandName`, `logoImgFileName`) VALUES
 (33, 'Jana', 'AL-jomaih', 'jana@gmail.com', '$2y$10$OIiL.lSIxKsHL0C77FNs2O.mqF0evwngQfCDi3HpYAI.tvw7kafZG', 'Jana Brand', '6611f7d088d4d.jpeg'),
 (34, 'Jojo', 'albanian ', 'Jojo@gmail.com', '$2y$10$XztWNcMetFWmZVBFUhnfKekrjeZf..x7NH2JJwuGtLXJU6iV3pMkO', 'Jojo Brand', '6611f89193e8d.jpeg'),
 (35, 'Yasmen', 'Saleh', 'Yasmen@gmail.com', '$2y$10$6wJiTOxFRgZ/6.ikpZ6iF.iJgpZ4bYbWLfI54e.o6qhLKQ4c127ea', 'Yasmen Brand', '6611fbb79aeca.jpeg'),
 (36, 'Yara', 'Bahmad ', 'Yara@gmail.com', '$2y$10$B9lEwataxQbbxQJ0jOxS2.mhLcvcsytkZUNLVAR/d8YMrXgG6Mkcu', 'Yara Brand', '6612aae159325.jpeg');
 
-
-
-CREATE TABLE `designerspeciality` (
-  `designerID` int(11) NOT NULL,
-  `designCategoryID` int(11) NOT NULL
-) 
 
 INSERT INTO `designerspeciality` (`designerID`, `designCategoryID`) VALUES
 (33, 1),
@@ -107,26 +142,12 @@ INSERT INTO `designerspeciality` (`designerID`, `designCategoryID`) VALUES
 (35, 3),
 (36, 4);
 
-
-CREATE TABLE `designportfolioproject` (
-  `id` int(11) NOT NULL,
-  `designerID` int(11) NOT NULL,
-  `projectName` varchar(255) NOT NULL,
-  `projectImgFileName` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `designCategoryID` int(11) NOT NULL
-) 
-
 INSERT INTO `designportfolioproject` (`id`, `designerID`, `projectName`, `projectImgFileName`, `description`, `designCategoryID`) VALUES
 (23, 33, 'Floor Plans', '6611f82d97f3a_Real Estate Watercolor 2D Floor Plans Part 1.jpeg', ' a watercolor floor plan of the first floor of a house in Houston, featuring a mix of informal and formal living and dining areas, a kitchen, a powder room, a foyer, and an outdoor wood deck.', 3),
 (24, 34, 'design', '6611f8de537fb_architecture portfolio design.jpeg', 'designer\'s portfolio, depicting various aspects of interior spaces and furnishings, with annotations and measurements that provide insight into the design process.', 1),
 (25, 35, 'Home', '6611fbf875390_fantasy house concept art interior.jpeg', ' 3D isometric view of a two-story house interior, complete with a bedroom loft, living area, kitchen, and staircase, all designed with modern furnishings and green plant accents', 1),
 (26, 36, 'Dream Home', '6612ac1d99cec_u48H9BVz.jpeg', ' interior design sketch for a living room space. It showcases various furniture pieces like a sectional sofa, armchairs, and a central kitchen island with stools. There are annotations for different elements such as a television, an oven, and a staircase, along with materials like wood, metal, and textile. To the right, a window is indicated to have stained glass. ', 2);
 
-CREATE TABLE `requeststatus` (
-  `id` int(11) NOT NULL,
-  `status` varchar(255) NOT NULL
-) 
 
 INSERT INTO `requeststatus` (`id`, `status`) VALUES
 (1, 'Pending'),
@@ -134,13 +155,6 @@ INSERT INTO `requeststatus` (`id`, `status`) VALUES
 (3, 'Declined'),
 (4, 'Completed'),
 (5, 'consultation provided');
-
-
-
-CREATE TABLE `roomtype` (
-  `id` int(11) NOT NULL,
-  `type` varchar(255) NOT NULL
-) 
 
 INSERT INTO `roomtype` (`id`, `type`) VALUES
 (1, 'Living Room'),
@@ -244,5 +258,7 @@ ALTER TABLE `designerspeciality`
 ALTER TABLE `designportfolioproject`
   ADD CONSTRAINT `designportfolioproject_ibfk_1` FOREIGN KEY (`designerID`) REFERENCES `designer` (`id`),
   ADD CONSTRAINT `designportfolioproject_ibfk_2` FOREIGN KEY (`designCategoryID`) REFERENCES `designcategory` (`id`);
+
+
 
 
