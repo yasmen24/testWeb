@@ -256,7 +256,7 @@ if(mysqli_connect_error()){
                                            $_SESSION['requestID']=$row['id'] ;
                                            
                                            echo "<td><a href='DesignConsultationPage.php?requestID=" . $row['id'] . "'><strong>Provide Consultation</strong></a></td>";
-                                           echo "<td><a href='DeclineConsultationPage.php?requestID=" . $row['id'] . "'><strong>Decline Consultation</strong></a></td>";
+                                           echo "<td><a href='javascript:void(0);' onclick='declineConsultation({$row['id']}, this)'><strong>Decline Consultation</strong></a></td>";
                                            echo "</tr>";
                                       }
                                           
@@ -264,8 +264,30 @@ if(mysqli_connect_error()){
                                      echo "<tr><td colspan='8' style='text-align: center;'><strong style='font-size: 40px; color:#801e00; padding: 20px;'> No consultation request.</strong></td></tr>";}
                                                      
                                 ?>
-                                <?php
-                                                 ?>
+                                <script> // ChatGPT encoded
+                                    function declineConsultation(requestID, link) {
+                                        // Perform the AJAX request
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open('POST', 'DeclineConsultationPage.php', true);
+                                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                                        xhr.onreadystatechange = function() {
+                                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                                if (xhr.status === 200) {
+                                                    const response = JSON.parse(xhr.responseText);
+                                                    if (response === true) {
+                                                        // Remove the row from the table
+                                                        link.closest('tr').remove();
+                                                    } else {
+                                                        console.error('Failed to decline consultation');
+                                                    }
+                                                }
+                                            }
+                                        };
+                                        // Send the request with the request ID
+                                        xhr.send('requestID=' + requestID);
+                                    }
+
+                                </script>
                                 </tbody>    
 
                                 </table>
