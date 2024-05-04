@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost"; // or your server IP address
-$username = "root";
-$password = "root";
-$dbname = "webproject";
+$servername = "sql101.infinityfree.com"; // or your server IP address
+$username = "if0_36484547";
+$password = "DesignMate3213";
+$dbname = "if0_36484547_webproject";
 
 // Create connection
 $conn = mysqli_connect($servername, $username, $password, $dbname);
