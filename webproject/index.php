@@ -13,8 +13,10 @@
 
         <div class="logo-title">
 
-            <img src="image/logo.jpeg" alt="design mate Logo" id="logo">
-
+            
+<a href="https://designmate.infinityfreeapp.com/DesignMate/index.php">
+    <img src="image/logo.jpeg" alt="design mate Logo" id="logo">
+</a>
             <span></span>
 
         </div>
