@@ -6,7 +6,7 @@ include 'session_check.php';
             ini_set('log_errors', '1');
             ini_set('display_errors', '1');
 
-        $connection = mysqli_connect("sql101.infinityfree.com","if0_36484547","DesignMate3213","if0_36484547_webproject", "3306");
+        $connection = mysqli_connect("localhost","root","root","webproject", "3306");
 if(mysqli_connect_error()){
         echo '<p> Sorry can not connect to Data Base </p><br>';
         die(mysqli_connect_error());

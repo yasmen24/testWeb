@@ -27,11 +27,4 @@
     'logoImgFileName' => '6612aae159325.jpeg',
     'specialties' => 'Modern, Bohemian',
   ),
-  4 => 
-  array (
-    'id' => 51,
-    'brandName' => 'thamer',
-    'logoImgFileName' => '661fc14750c1f.jpeg',
-    'specialties' => 'Bohemian',
-  ),
 );
