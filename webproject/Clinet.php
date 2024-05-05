@@ -82,7 +82,7 @@ function fetchConsultationRequests($clientId)
 $consultationRequests = fetchConsultationRequests($clientId);
 
 //client info 
-$sql = "SELECT * FROM client WHERE `id`=" . $clientId;
+$sql = "SELECT * FROM client WHERE id=" . $clientId;
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($result);
 
@@ -110,7 +110,7 @@ $row = mysqli_fetch_assoc($result);
     </div>
 </header>
 
-<!--***********************************************************************-->
+<!--*************************-->
 
 <!--welcome message & user info-->
 <section id="userInfoSection">
@@ -125,7 +125,7 @@ $row = mysqli_fetch_assoc($result);
         </ul>
     </div>
 </section>
-<!--************************************************************************-->
+<!--************************-->
 
 <!-- interior design table part -->
 <section id="interiordesignPart">
